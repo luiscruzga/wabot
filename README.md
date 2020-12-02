@@ -10,6 +10,10 @@ It is not an official whatsapp module so I am not responsible for any ban. Altho
 
 NOTE: Node 10.15.0+ is required
 
+## Documentation
+
+You can found all documentation here [Documentation](https://luiscruzga.github.io/wabot/)
+
 ## Supported features
 
 | Feature  | Status |
