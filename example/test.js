@@ -128,6 +128,7 @@ const wabot = new WABOT({
 });
 
 wabot.on('message', (res) => {
+	// Example for download file
     if (res.data.type === 'document' || res.data.type === 'video'){
         wabot.sendMessage({
             "idChat": res.data.from,
