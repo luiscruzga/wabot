@@ -1,0 +1,12 @@
+{
+    "required": ["type", "idChat", "file"],
+    "spec": {
+        "type": "",
+        "idChat": "",
+        "idMessage": "",
+        "replyMessage": false,
+        "caption": "",
+        "isGif": true,
+        "file": ""
+    }
+}

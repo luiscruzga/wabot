@@ -1,0 +1,52 @@
+{
+  "name": "wabot",
+  "version": "1.1.0",
+  "description": "Whatsapp Bot Module for automate response and interact whit users",
+  "main": "src/WABOT.js",
+  "scripts": {
+    "test": "node --no-warnings ./example/test.js",
+    "docs": "node_modules/.bin/jsdoc --configure jsdoc.json",
+    "start": "node --no-warnings ./src/WABOT.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luiscruzga/wabot.git"
+  },
+  "homepage": "https://github.com/luiscruzga/wabot#readme",
+  "keywords": [
+    "whatsapp",
+    "whatsapp-web",
+    "api",
+    "bot",
+    "client",
+    "node"
+  ],
+  "author": "Luis Cruz",
+  "license": "ISC",
+  "dependencies": {
+    "cli-progress": "^3.8.2",
+    "crypto": "^1.0.1",
+    "del": "^6.0.0",
+    "events": "^3.2.0",
+    "fs": "0.0.1-security",
+    "imagemin": "^7.0.1",
+    "imagemin-webp": "^6.0.0",
+    "jsdoc": "^3.6.6",
+    "jsdoc-template": "^1.2.0",
+    "lodash": "^4.17.20",
+    "merge-anything": "^3.0.6",
+    "node-base64-image": "^1.0.7",
+    "ora": "^5.1.0",
+    "path": "^0.12.7",
+    "puppeteer": "^3.2.0",
+    "qrcode-terminal": "^0.12.0",
+    "request": "^2.88.2",
+    "util": "^0.12.3",
+    "vcard": "^0.1.0",
+    "vcards-js": "^2.10.0"
+  },
+  "devDependencies": {
+    "jsdoc": "^3.6.6",
+    "better-docs": "^2.3.2"
+  }
+}

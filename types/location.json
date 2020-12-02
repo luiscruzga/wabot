@@ -1,0 +1,12 @@
+{
+    "required": ["type", "idChat", "lat", "lng", "title"],
+    "spec": {
+        "type": "",
+        "idChat": "",
+        "idMessage": "",
+        "replyMessage": false,
+        "lat": "",
+        "lng": "",
+        "title": ""
+    }
+}

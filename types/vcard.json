@@ -1,0 +1,11 @@
+{
+    "required": ["type", "idChat", "vcard", "contactName"],
+    "spec": {
+        "type": "",
+        "idChat": "",
+        "idMessage": "",
+        "replyMessage": false,
+        "vcard": "",
+        "contactName": ""
+    }
+}

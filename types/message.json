@@ -1,0 +1,10 @@
+{
+    "required": ["type", "idChat", "message"],
+    "spec": {
+        "type": "",
+        "idChat": "",
+        "idMessage": "",
+        "replyMessage": false,
+        "message": ""
+    }
+}

@@ -1,0 +1,33 @@
+{
+    "showContent": false,
+    "debug": false,
+    "removeBgApis": [],
+    "executions": {
+        "reponseUsers": true,
+        "simulateTyping": false,
+        "timeSimulate": 3000,
+        "contorlExecutions": false,
+        "maxExecutions": 30,
+        "timeInterval": 10,
+        "timePending": 3,
+        "sendSeen": true,
+        "sendSeenFull": false,
+        "intervalSendSeen": 10
+    },
+    "bann": {
+        "active": true,
+        "timeInterval": 10,
+        "maxBann": 3,
+        "timeBann": 10,
+        "timeInactive": 5,
+        "whiteList": []
+    },
+    "messages":{
+        "userBanned": "⛔😡 *We report that you have been temporarily banned for misusing our services * \n _Please try again after {{TIMEBANN}} minutes_ 🤬",
+        "groupBanned": "⛔😡 *We report that this group has been temporarily banned for misuse of our services by '{{USER_NAME}}' (+ {{USER_NUMBER}}) * \n _Please try again after {{TIMEBANN}} minutes_ 🤬",
+        "privileges": "⛔ *Unfortunately you do not have privileges, contact the system administrator* ⛔"
+    },
+    "blocked": [],
+    "whiteList": [],
+    "commands": []
+}

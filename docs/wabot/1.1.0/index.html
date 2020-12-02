@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wabot Documentation Home</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">Wabot Documentation</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                 
+                    
+                        <a
+                            class="link user-link "
+                            href="https://github.com/luiscruzga/wabot"
+                        >
+                            Github
+                        </a>
+                    
+                        <a
+                            class="link user-link "
+                            href="https://github.com/luiscruzga/wabot/blob/master/example/test.js"
+                        >
+                            Example
+                        </a>
+                    
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+                <div class="search-wrapper">
+                    <input id="search" type="text" placeholder="Search docs..." class="input">
+                </div>
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="WABOT.html">WABOT</a></li></ul><h3>Events</h3><ul><li><a href="WABOT.html#event:command">command</a></li><li><a href="WABOT.html#event:message">message</a></li><li><a href="WABOT.html#event:onAddedToGroup">onAddedToGroup</a></li><li><a href="WABOT.html#event:onBattery">onBattery</a></li><li><a href="WABOT.html#event:onMessageFromBloqued">onMessageFromBloqued</a></li><li><a href="WABOT.html#event:onMessageFromNoPrivileges">onMessageFromNoPrivileges</a></li><li><a href="WABOT.html#event:onMessageMediaUploadedEvent">onMessageMediaUploadedEvent</a></li><li><a href="WABOT.html#event:onParticipantsChanged">onParticipantsChanged</a></li><li><a href="WABOT.html#event:onPlugged">onPlugged</a></li><li><a href="WABOT.html#event:onRemovedFromGroup">onRemovedFromGroup</a></li><li><a href="WABOT.html#event:onStateChanged">onStateChanged</a></li><li><a href="WABOT.html#event:ready">ready</a></li><li><a href="WABOT.html#event:vcard">vcard</a></li><li><a href="WABOT.html#event:waitNewAcknowledgements">waitNewAcknowledgements</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p></p>
+                    <h1>Home</h1>
+                </header>
+                
+
+
+
+    
+
+
+    <h3>wabot 1.1.0</h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>WABOT!</h1>
+<p>Wabot is a nodejs module which allows you to connect with whatsapp web by using Puppeteer.</p>
+<p>It is not an official whatsapp module so I am not responsible for any ban. Although I have tried a lot and have not been banned, I cannot guarantee that this is the case for everyone or that in the future restrictions will apply to prevent its use.</p>
+<h1>Installation</h1>
+<pre><code>npm i wabot
+</code></pre>
+<p>NOTE: Node 10.15.0+ is required</p>
+<h2>Supported features</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Send messages</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Receive messages</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Send media (images/audio/documents)</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Send media (video)</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Send stickers</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Send stickers without background</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Receive media (images/audio/video/documents)</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Send contact cards</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Send location</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Receive location</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Message replies</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Join groups by invite</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Get invite for group</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Modify group info (subject, description)</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Add group participants</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Kick group participants</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Promote/demote group participants</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Mention users</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Mute/unmute chats</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Get contact info</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Get profile pictures</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Set user status message</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Send Text to Image</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Ban user by spam</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Permission control</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Custom commands</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Valid responses</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<h2>Example usage</h2>
+<pre class="prettyprint source lang-js"><code>const  WABOT = require('wabot');
+const  path = require('path');
+const  commands = [
+	{
+		&quot;name&quot;:  &quot;diffSiebel&quot;,
+		&quot;contains&quot;: [],
+		&quot;exact&quot;: [&quot;@diff_siebel&quot;, &quot;diferencias siebel&quot;, &quot;difierencias con siebel&quot;, &quot;diferencias migracion siebel&quot;, &quot;diff siebel&quot;],
+		&quot;params&quot;: [
+			{
+				&quot;name&quot;:  &quot;idOnda&quot;,
+				&quot;isNumber&quot;:  true,
+				&quot;request&quot;: [
+					&quot;*Indicame el id de onda a consultar:*&quot;,
+					&quot;*Dame el id de onda a revisar:*&quot;
+				],
+				&quot;values&quot;:  &quot;any&quot;,
+				&quot;badResponse&quot;: [
+					&quot;Por favor ingrese un valor válido.&quot;,
+					&quot;Id Onda incorrecto, favor ingresa un valor válido.&quot;
+				]
+			},
+			{
+				&quot;name&quot;:  &quot;ambienteMig&quot;,
+				&quot;request&quot;: [
+					&quot;Indicame el ambiente de migración al cual deseas consultar:&quot;,
+					&quot;Seleccione el ambiente de migración a consultar:&quot;
+				],
+				&quot;values&quot;: [&quot;DESA&quot;, &quot;TEST&quot;, &quot;PROD&quot;],
+				&quot;badResponse&quot;: [
+					&quot;El ambiente indicado no es correcto, por favor indica un ambiente válido.&quot;
+				]
+			},
+			{
+				&quot;name&quot;:  &quot;ambienteSiebel&quot;,
+				&quot;request&quot;: [
+					&quot;Indicame el ambiente de Siebel al cual deseas consultar:&quot;,
+					&quot;Seleccione el ambiente de Siebel a consultar:&quot;
+				],
+				&quot;values&quot;: [&quot;QA&quot;, &quot;MIGRACION&quot;, &quot;INTEGRADO&quot;, &quot;PROD&quot;, &quot;CLOUD&quot;, &quot;PREPROD&quot;],
+				&quot;badResponse&quot;: [
+					&quot;El ambiente indicado no es correcto, por favor indica un ambiente válido.&quot;
+				]
+			}
+		]
+	},
+	{
+		&quot;name&quot;:  &quot;status_onda&quot;,
+		&quot;contains&quot;: [],
+		&quot;exact&quot;: [&quot;@status_onda&quot;, &quot;status_onda&quot;, &quot;/status_onda&quot;, &quot;estatus onda&quot;, &quot;status onda&quot;],
+		&quot;params&quot;: [
+			{
+				&quot;name&quot;:  &quot;ambiente&quot;,
+				&quot;request&quot;: [
+				&quot;*Indicame el ambiente al cual deseas consultar:*&quot;,
+				&quot;*Seleccione el ambiente a consultar:*&quot;
+				],
+				&quot;values&quot;: [&quot;DESA&quot;, &quot;TEST&quot;, &quot;PROD&quot;],
+				&quot;badResponse&quot;: [
+				&quot;*El ambiente indicado no es correcto, por favor indica un ambiente válido.*&quot;
+				]
+			},
+			{
+				&quot;name&quot;:  &quot;idOnda&quot;,
+				&quot;isNumber&quot;:  true,
+				&quot;request&quot;: [
+					&quot;*Indicame el id de onda a consultar:*&quot;,
+					&quot;*Dame el id de onda a revisar:*&quot;
+				],
+				&quot;values&quot;:  &quot;any&quot;,
+				&quot;badResponse&quot;: [
+					&quot;Por favor ingrese un valor válido.&quot;,
+					&quot;Id Onda incorrecto, favor ingresa un valor válido.&quot;
+				]
+			}
+		]
+	},
+	{
+		&quot;name&quot;:  &quot;help&quot;,
+		&quot;contains&quot;: [],
+		&quot;exact&quot;: [&quot;@help&quot;, &quot;@ayuda&quot;, &quot;ayuda&quot;, &quot;help&quot;, &quot;@comandos&quot;, &quot;comandos&quot;]
+	},
+	{
+		&quot;name&quot;:  &quot;chiste&quot;,
+		&quot;contains&quot;: [],
+		&quot;exact&quot;: [&quot;@chiste&quot;, &quot;@chistes&quot;, &quot;chiste&quot;, &quot;chistes&quot;]
+	},
+	{
+		&quot;name&quot;:  &quot;meme&quot;,
+		&quot;contains&quot;: [],
+		&quot;exact&quot;: [&quot;@meme&quot;, &quot;@memes&quot;, &quot;meme&quot;, &quot;memes&quot;]
+	},
+	{
+		&quot;name&quot;:  &quot;news&quot;,
+		&quot;contains&quot;: [],
+		&quot;exact&quot;: [&quot;@noticias&quot;, &quot;@noticia&quot;, &quot;noticia&quot;, &quot;noticias&quot;]
+	},
+	{
+		&quot;name&quot;:  &quot;sticker&quot;,
+		&quot;contains&quot;: [],
+		&quot;exact&quot;: [&quot;@makesticker&quot;, &quot;@sticker&quot;, &quot;sticker&quot;, &quot;makesticker&quot;]
+	},
+	{
+		&quot;name&quot;:  &quot;location&quot;,
+		&quot;contains&quot;: [],
+		&quot;exact&quot;: [&quot;@lugar&quot;, &quot;@location&quot;, &quot;lugar&quot;, &quot;location&quot;]
+	},
+	{
+		&quot;name&quot;:  &quot;contacto&quot;,
+		&quot;contains&quot;: [],
+		&quot;exact&quot;: [&quot;contacto&quot;, &quot;@contacto&quot;]
+	}
+];
+
+const  wabot = new  WABOT({
+	puppeteerConfig: {viewBrowser:  true, opendevtools:  true},
+	intentsConfig: {
+		debug: true,
+		bann: {
+			active:  false,
+		},
+		whiteList: [&quot;56954372453@c.us&quot;, &quot;56961464765@c.us&quot;],
+		executions: {
+			simulateTyping:  true,
+		},
+		removeBgApis: [ &quot;pUXZvFuC7ZE4y3FcroP56fdf&quot; ],
+		commands:  commands
+	}
+});
+
+wabot.on('message', (res) => {
+    if (res.data.type === 'document' || res.data.type === 'video'){
+        wabot.sendMessage({
+            &quot;idChat&quot;: res.data.from,
+            &quot;message&quot;: `Thanks for your file.`
+        });
+
+        wabot.downloadFile(res.data.id)
+        .then((file) => {
+            console.log('file downloaded...', file);
+        })
+        .catch((err) => {
+            console.log('error downloading file', err);
+        })
+    } else {
+        wabot.sendMessage({
+            &quot;idChat&quot;: res.data.from,
+            &quot;message&quot;: `You say: ${res.data.body}`
+        });
+    }
+});
+  
+wabot.on('vcard', (res) => {
+	wabot.sendMessage({
+	&quot;idChat&quot;:  res.data.from,
+	&quot;message&quot;:  &quot;This is a response to vcard&quot;
+	});
+});
+
+wabot.on('help', (res) => {
+	wabot.sendMessage({
+	&quot;idChat&quot;:  res.data.from,
+	&quot;message&quot;:  &quot;*This is a help.*&quot;
+	});
+});
+
+wabot.on('chiste', (res) => {
+	wabot.sendMessage({
+	&quot;idChat&quot;:  res.data.from,
+	&quot;message&quot;:  &quot;This is a joke&quot;
+	});
+});
+
+wabot.on('meme', (res) => {
+	wabot.sendImage({
+	&quot;idChat&quot;:  res.data.from,
+	&quot;caption&quot;:  &quot;This is a meme.&quot;,
+	&quot;file&quot;:  path.join(__dirname, &quot;meme.jpg&quot;)
+	});
+});
+
+wabot.on('news', (res) => {
+	wabot.sendLink({
+	&quot;idChat&quot;:  res.data.from,
+	&quot;caption&quot;:  &quot;This is a description&quot;,
+	&quot;link&quot;: &quot;http://feedproxy.google.com/~r/fayerwayer/~3/w3C_M7uD-No/ios-14-punto-verde-o-naranja-en-iphone&quot;
+	});
+});
+
+wabot.on('sticker', (res) => {
+	wabot.sendSticker({
+	&quot;idChat&quot;:  res.data.from,
+	&quot;file&quot;:  res.media
+	});
+});
+
+wabot.on('location', (res) => {
+	wabot.sendLocation({
+	&quot;idChat&quot;:  res.data.from,
+	&quot;lat&quot;:  &quot;-33.0467291&quot;,
+	&quot;lng&quot;:  &quot;-71.6169808&quot;,
+	&quot;title&quot;:  &quot;Freire 470, Hogar&quot;
+	});
+});
+
+wabot.on('contacto', (res) => {
+	wabot.sendVcard({
+		&quot;idChat&quot;:  res.data.from,
+		&quot;contactName&quot;:  &quot;Luis Cruz&quot;,
+		&quot;vcard&quot;: {
+			firstName:  &quot;Luis&quot;,
+			lastName:  &quot;Cruz&quot;,
+			birthday:  &quot;29-02-1990&quot;,
+			url:  &quot;https://github.com/luiscruzga&quot;,
+			nickname:  &quot;Luis Cruz&quot;,
+			cellPhone:  &quot;+56961467583&quot;,
+			email:  &quot;luis.xxxxxxx@gmail.com&quot;,
+			photo:  path.join(__dirname, &quot;test.jpg&quot;)
+		}
+	});
+});
+  
+wabot.on('onAddedToGroup', (res) => {
+	console.log('Added to a group', res);
+});
+  
+wabot.on('onRemovedFromGroup', (res) => {
+	console.log('Removed from a group', res);
+});
+
+wabot.on('diffSiebel', (res) => {
+	wabot.sendMessage({
+	&quot;idChat&quot;:  res.data.from,
+	&quot;message&quot;:  `You entered the parameters: AmbienteMig: ${res.params.ambienteMig}, idOnda: ${res.params.idOnda}, ambienteSiebel: ${res.params.ambienteSiebel}`
+	});
+});
+
+wabot.on('status_onda', (res) => {
+	wabot.sendMessage({
+	&quot;idChat&quot;:  res.data.from,
+	&quot;message&quot;:  `You entered the parameters: Ambiente: ${res.params.ambiente}, idOnda: ${res.params.idOnda}`
+	});
+});
+
+wabot.on('ready', (session) => {
+	console.log('READY', session);
+	//console.log('Clossing Session');
+	//wabot.closeSession();
+});
+
+wabot.start();
+</code></pre>
+<h2>Default Options</h2>
+<p>Wabot accepts different startup options, then the default options.
+<strong>puppeteerConfig</strong>:</p>
+<pre class="prettyprint source lang-json"><code>{
+	&quot;WAUrl&quot;: &quot;https://web.whatsapp.com&quot;,
+	&quot;viewBrowser&quot;: false,
+	&quot;opendevtools&quot;: false,
+	&quot;userAgent&quot;: &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.92 Safari/537.36&quot;,
+	&quot;width&quot;: 1000,
+	&quot;heigth&quot;: 800,
+	&quot;dowloadChromeVersion&quot;: false,
+	&quot;chromeVersion&quot;: 737027,
+	&quot;localChromePath&quot;: &quot;C:/Program Files (x86)/Google/Chrome/Application/chrome.exe&quot;,
+	&quot;args&quot;: [
+		&quot;--log-level=3&quot;,
+		&quot;--no-default-browser-check&quot;,
+		&quot;--disable-site-isolation-trials&quot;,
+		&quot;--no-experiments&quot;,
+		&quot;--ignore-gpu-blacklist&quot;,
+		&quot;--ignore-certificate-errors&quot;,
+		&quot;--ignore-certificate-errors-spki-list&quot;,
+		&quot;--disable-extensions&quot;,
+		&quot;--disable-default-apps&quot;,
+		&quot;--enable-features=NetworkService&quot;,
+		&quot;--disable-setuid-sandbox&quot;,
+		&quot;--no-sandbox&quot;,
+		&quot;--disable-infobars&quot;,
+		&quot;--window-position=0,0&quot;,
+		&quot;--ignore-certifcate-errors&quot;,
+		&quot;--ignore-certifcate-errors-spki-list&quot;,
+		&quot;--disable-threaded-animation&quot;,
+		&quot;--disable-threaded-scrolling&quot;,
+		&quot;--disable-histogram-customizer&quot;,
+		&quot;--disable-composited-antialiasing&quot;,
+		&quot;--disable-dev-shm-usage&quot;,
+		&quot;--disable-notifications&quot;
+	]
+}
+</code></pre>
+<p><strong>intentsConfig</strong>:</p>
+<pre class="prettyprint source lang-json"><code>{
+	&quot;showContent&quot;: false,
+	&quot;debug&quot;: false,
+	&quot;removeBgApis&quot;: [],
+	&quot;executions&quot;: {
+		&quot;reponseUsers&quot;: true,
+		&quot;simulateTyping&quot;: false,
+		&quot;timeSimulate&quot;: 3000,
+		&quot;contorlExecutions&quot;: false,
+		&quot;maxExecutions&quot;: 30,
+		&quot;timeInterval&quot;: 10,
+		&quot;timePending&quot;: 3,
+		&quot;sendSeen&quot;: true,
+		&quot;sendSeenFull&quot;: false,
+		&quot;intervalSendSeen&quot;: 10
+	},
+	&quot;bann&quot;: {
+		&quot;active&quot;: true,
+		&quot;timeInterval&quot;: 10,
+		&quot;maxBann&quot;: 3,
+		&quot;timeBann&quot;: 10,
+		&quot;timeInactive&quot;: 5,
+		&quot;whiteList&quot;: []
+	},
+	&quot;messages&quot;:{
+		&quot;userBanned&quot;: &quot;⛔😡 *We report that you have been temporarily banned for misusing our services * \n _Please try again after {{TIMEBANN}} minutes_ 🤬&quot;,
+		&quot;groupBanned&quot;: &quot;⛔😡 *We report that this group has been temporarily banned for misuse of our services by '{{USER_NAME}}' (+ {{USER_NUMBER}}) * \n _Please try again after {{TIMEBANN}} minutes_ 🤬&quot;,
+		&quot;privileges&quot;: &quot;⛔ *Unfortunately you do not have privileges, contact the system administrator* ⛔&quot;
+	},
+	&quot;blocked&quot;: [],
+	&quot;whiteList&quot;: [],
+	&quot;commands&quot;: []
+}
+</code></pre>
+<h2>Disclaimer</h2>
+<p>This module is not official WhatsApp so you must be careful with the number of interactions per minute to avoid possible bans, this module has the option of queuing responses to avoid such a situation but does not ensure that actions cannot occur on the part of the company.</p>
+<p>This project is inspired by <a href="https://github.com/vasani-arpit/WBOT">Wbot</a> I just dedicate myself to adding new options to it.</p></article>
+    </section>
+
+
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+<script src="scripts/search.js"> </script>
+
+</body>
+</html>

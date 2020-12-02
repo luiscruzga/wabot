@@ -1,0 +1,41 @@
+{
+    "source": {
+        "include": ["src", "package.json", "README.md"],
+        "includePattern": ".js$",
+        "excludePattern": "(node_modules/|docs)"
+    },
+    "plugins": [
+        "plugins/markdown"
+    ],
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": true,
+        "useLongnameInNav": false,
+        "showInheritedInNav": true,
+        "search": true,
+        "better-docs": {
+            "name": "Wabot Documentation",
+            "title": "Wabot Documentation",
+            "hideGenerator": false,
+                "navLinks": [
+                    {
+                        "label": "Github",
+                        "href": "https://github.com/luiscruzga/wabot"
+                    },
+                    {
+                        "label": "Example",
+                        "href": "https://github.com/luiscruzga/wabot/blob/master/example/test.js"
+                    }
+                ]
+            }
+    },
+    "opts": {
+        "encoding": "utf8",
+        "recurse": true,
+        "private": false,
+        "lenient": true,
+        "verbose": true,
+        "destination": "./docs",
+        "template": "node_modules/better-docs"
+    }
+}
