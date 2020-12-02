@@ -377,7 +377,6 @@ class WABOT extends EventEmitter {
     }
 
     getNewMessages(arg) {
-        console.log('getNewMessages');
         let _this = this;
         if (this.intentConfig.commands.length === 0) {
             switch (arg.data.type) {
