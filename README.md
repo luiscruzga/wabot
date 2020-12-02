@@ -12,7 +12,7 @@ NOTE: Node 10.15.0+ is required
 
 ## Documentation
 
-You can found all documentation here [Documentation](https://luiscruzga.github.io/wabot/)
+You can find all documentation here [Documentation](https://luiscruzga.github.io/wabot/)
 
 ## Supported features
 
