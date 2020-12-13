@@ -8,7 +8,7 @@ const defaultConfig = {
     messageError: '*Ooops, an error occurred while trying to search, try again later*'
 }
 /**
- * Plugin that allows the search of different things in wikipedia
+ * Plugin that allows you to translate the desired text into any language
  * @function translate
  * @memberof Plugins
  * @param {string} idChat - Chat id to send the new image to
