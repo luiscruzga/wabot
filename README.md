@@ -45,6 +45,7 @@ You can find all documentation here [Documentation](https://luiscruzga.github.io
 | Permission control | ✅ |
 | Custom commands | ✅ |
 | Valid responses | ✅ |
+| Add plugins | ✅ |
 
 
 ## Plugins 
@@ -67,6 +68,7 @@ Below is a list of the plugins that come by default incorporated with the module
 | Cartoon | Plugin to transform your selfie into an cartoon portrait using |
 | Coronavirus | Plugin to obtain information on the coronavirus by countries, cases, deaths, etc |
 | Music | Plugin to get a song in mp3 format directly from soundcloud |
+| Meme | Plugin that allows you to send various memes from subreddits in Spanish and English |
 | News | Plugin to get news from the different rss sources that are configured |
 | Translate | Plugin that allows you to translate a text to the language that is requested |
 | Wiki | Plugin that allows the search of different things in wikipedia |
@@ -164,9 +166,9 @@ const  commands = [
 		"exact": ["@chiste", "@chistes", "chiste", "chistes"]
 	},
 	{
-		"name":  "meme",
+		"name":  "getImage",
 		"contains": [],
-		"exact": ["@meme", "@memes", "meme", "memes"]
+		"exact": ["@image", "@images", "image", "images"]
 	},
 	{
 		"name":  "news",
@@ -326,6 +328,11 @@ const  commands = [
 				]
 			}
 		]
+	},
+	{
+		"name":  "getMeme",
+		"contains": [],
+		"exact": ["@meme", "@memes", "meme", "memes"]
 	}
 ];
 
@@ -343,7 +350,7 @@ const  wabot = new  WABOT({
 		removeBgApis: [ "pUXZvFuC7ZE4y3FcroP56fdf" ],
 		plugins: {
 			folder: "../plugins",
-			plugins: ['makeZombie', 'wiki', 'coronavirus', 'youtube', 'cartoon', 'music', 'anime', 'news', 'translate'],
+			plugins: ['makeZombie', 'wiki', 'coronavirus', 'youtube', 'cartoon', 'music', 'anime', 'news', 'translate', 'meme'],
 			setup: {
 				"news": { 
 					"timeRefresh": 10,
@@ -371,6 +378,7 @@ const  wabot = new  WABOT({
 	}
 });
 
+// Default when no assignment is found for the message
 wabot.on('message', (res) => {
     if (res.data.type === 'document' || res.data.type === 'video'){
         wabot.sendMessage({
@@ -414,10 +422,10 @@ wabot.on('chiste', (res) => {
 	});
 });
 
-wabot.on('meme', (res) => {
+wabot.on('getImage', (res) => {
 	wabot.sendImage({
 	"idChat":  res.data.from,
-	"caption":  "This is a meme.",
+	"caption":  "This is a image.",
 	"file":  path.join(__dirname, "meme.jpg")
 	});
 });
@@ -548,6 +556,13 @@ wabot.on('getTranslation', (res) => {
 		"idChat": res.data.from,
 		"text": res.params.text,
 		"to": 'en'
+    });
+});
+
+wabot.on('getMeme', (res) => {
+    wabot.meme({
+		"idChat": res.data.from,
+		"language": "es"
     });
 });
 

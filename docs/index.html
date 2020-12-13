@@ -250,6 +250,10 @@
 <td>Valid responses</td>
 <td>✅</td>
 </tr>
+<tr>
+<td>Add plugins</td>
+<td>✅</td>
+</tr>
 </tbody>
 </table>
 <h2>Plugins</h2>
@@ -287,8 +291,16 @@
 <td>Plugin to get a song in mp3 format directly from soundcloud</td>
 </tr>
 <tr>
+<td>Meme</td>
+<td>Plugin that allows you to send various memes from subreddits in Spanish and English</td>
+</tr>
+<tr>
 <td>News</td>
 <td>Plugin to get news from the different rss sources that are configured</td>
+</tr>
+<tr>
+<td>Translate</td>
+<td>Plugin that allows you to translate a text to the language that is requested</td>
 </tr>
 <tr>
 <td>Wiki</td>
@@ -301,10 +313,6 @@
 <tr>
 <td>Zombie</td>
 <td>Plugin that allows you to transform your selfie into a zombie</td>
-</tr>
-<tr>
-<td>Translate</td>
-<td>Plugin that allows you to translate a text to the language that is requested</td>
 </tr>
 </tbody>
 </table>
@@ -396,9 +404,9 @@ const  commands = [
 		&quot;exact&quot;: [&quot;@chiste&quot;, &quot;@chistes&quot;, &quot;chiste&quot;, &quot;chistes&quot;]
 	},
 	{
-		&quot;name&quot;:  &quot;meme&quot;,
+		&quot;name&quot;:  &quot;getImage&quot;,
 		&quot;contains&quot;: [],
-		&quot;exact&quot;: [&quot;@meme&quot;, &quot;@memes&quot;, &quot;meme&quot;, &quot;memes&quot;]
+		&quot;exact&quot;: [&quot;@image&quot;, &quot;@images&quot;, &quot;image&quot;, &quot;images&quot;]
 	},
 	{
 		&quot;name&quot;:  &quot;news&quot;,
@@ -558,6 +566,11 @@ const  commands = [
 				]
 			}
 		]
+	},
+	{
+		&quot;name&quot;:  &quot;getMeme&quot;,
+		&quot;contains&quot;: [],
+		&quot;exact&quot;: [&quot;@meme&quot;, &quot;@memes&quot;, &quot;meme&quot;, &quot;memes&quot;]
 	}
 ];
 
@@ -575,7 +588,7 @@ const  wabot = new  WABOT({
 		removeBgApis: [ &quot;pUXZvFuC7ZE4y3FcroP56fdf&quot; ],
 		plugins: {
 			folder: &quot;../plugins&quot;,
-			plugins: ['makeZombie', 'wiki', 'coronavirus', 'youtube', 'cartoon', 'music', 'anime', 'news', 'translate'],
+			plugins: ['makeZombie', 'wiki', 'coronavirus', 'youtube', 'cartoon', 'music', 'anime', 'news', 'translate', 'meme'],
 			setup: {
 				&quot;news&quot;: { 
 					&quot;timeRefresh&quot;: 10,
@@ -603,6 +616,7 @@ const  wabot = new  WABOT({
 	}
 });
 
+// Default when no assignment is found for the message
 wabot.on('message', (res) => {
     if (res.data.type === 'document' || res.data.type === 'video'){
         wabot.sendMessage({
@@ -646,10 +660,10 @@ wabot.on('chiste', (res) => {
 	});
 });
 
-wabot.on('meme', (res) => {
+wabot.on('getImage', (res) => {
 	wabot.sendImage({
 	&quot;idChat&quot;:  res.data.from,
-	&quot;caption&quot;:  &quot;This is a meme.&quot;,
+	&quot;caption&quot;:  &quot;This is a image.&quot;,
 	&quot;file&quot;:  path.join(__dirname, &quot;meme.jpg&quot;)
 	});
 });
@@ -780,6 +794,13 @@ wabot.on('getTranslation', (res) => {
 		&quot;idChat&quot;: res.data.from,
 		&quot;text&quot;: res.params.text,
 		&quot;to&quot;: 'en'
+    });
+});
+
+wabot.on('getMeme', (res) => {
+    wabot.meme({
+		&quot;idChat&quot;: res.data.from,
+		&quot;language&quot;: &quot;es&quot;
     });
 });
 

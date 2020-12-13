@@ -85,9 +85,9 @@ const  commands = [
 		"exact": ["@chiste", "@chistes", "chiste", "chistes"]
 	},
 	{
-		"name":  "meme",
+		"name":  "getImage",
 		"contains": [],
-		"exact": ["@meme", "@memes", "meme", "memes"]
+		"exact": ["@image", "@images", "image", "images"]
 	},
 	{
 		"name":  "link",
@@ -247,6 +247,11 @@ const  commands = [
 				]
 			}
 		]
+	},
+	{
+		"name":  "getMeme",
+		"contains": [],
+		"exact": ["@meme", "@memes", "meme", "memes"]
 	}
 ];
 
@@ -257,13 +262,13 @@ const wabot = new WABOT({
         bann: {
             active: false,
         },
-        whiteList: ["56954372453@c.us", "5696123445@c.us"],
+        whiteList: ["56954372453@c.us", "56961429861@c.us"],
         executions: {
             simulateTyping: true,
 		},
 		plugins: {
 			folder: "../plugins",
-			plugins: ['makeZombie', 'wiki', 'coronavirus', 'youtube', 'cartoon', 'music', 'anime', 'news', 'translate'],
+			plugins: ['makeZombie', 'wiki', 'coronavirus', 'youtube', 'cartoon', 'music', 'anime', 'news', 'translate', 'meme'],
 			setup: {
 				"news": { 
 					"timeRefresh": 10,
@@ -291,6 +296,7 @@ const wabot = new WABOT({
     }
 });
 
+// Default when no assignment is found for the message
 wabot.on('message', (res) => {
     if (res.data.type === 'document' || res.data.type === 'video'){
         wabot.sendMessage({
@@ -334,10 +340,10 @@ wabot.on('chiste', (res) => {
     });
 });
 
-wabot.on('meme', (res) => {
+wabot.on('getImage', (res) => {
     wabot.sendImage({
         "idChat": res.data.from,
-        "caption": "This is a meme.",
+        "caption": "This is a image.",
         "file": path.join(__dirname, "meme.jpg")
     });
 });
@@ -468,6 +474,13 @@ wabot.on('getTranslation', (res) => {
 		"idChat": res.data.from,
 		"text": res.params.text,
 		"to": 'en'
+    });
+});
+
+wabot.on('getMeme', (res) => {
+    wabot.meme({
+		"idChat": res.data.from,
+		"language": "es"
     });
 });
 
