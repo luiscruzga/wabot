@@ -2,6 +2,11 @@
     "showContent": false,
     "debug": false,
     "removeBgApis": [],
+    "plugins": {
+        "folder": "../plugins",
+        "plugins": [],
+        "setup": {}
+    },
     "executions": {
         "reponseUsers": true,
         "simulateTyping": false,

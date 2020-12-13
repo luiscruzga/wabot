@@ -7,7 +7,7 @@
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Wabot Documentation WABOT.js</title>
+  <title>Wabot Documentation src/WABOT.js</title>
 
   <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -92,7 +92,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="WABOT.html">WABOT</a></li></ul><h3>Events</h3><ul><li><a href="WABOT.html#event:command">command</a></li><li><a href="WABOT.html#event:message">message</a></li><li><a href="WABOT.html#event:onAddedToGroup">onAddedToGroup</a></li><li><a href="WABOT.html#event:onBattery">onBattery</a></li><li><a href="WABOT.html#event:onMessageFromBloqued">onMessageFromBloqued</a></li><li><a href="WABOT.html#event:onMessageFromNoPrivileges">onMessageFromNoPrivileges</a></li><li><a href="WABOT.html#event:onMessageMediaUploadedEvent">onMessageMediaUploadedEvent</a></li><li><a href="WABOT.html#event:onParticipantsChanged">onParticipantsChanged</a></li><li><a href="WABOT.html#event:onPlugged">onPlugged</a></li><li><a href="WABOT.html#event:onRemovedFromGroup">onRemovedFromGroup</a></li><li><a href="WABOT.html#event:onStateChanged">onStateChanged</a></li><li><a href="WABOT.html#event:ready">ready</a></li><li><a href="WABOT.html#event:vcard">vcard</a></li><li><a href="WABOT.html#event:waitNewAcknowledgements">waitNewAcknowledgements</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Namespaces</h3><ul><li><a href="Plugins.html">Plugins</a></li></ul><h3>Classes</h3><ul><li><a href="WABOT.html">WABOT</a></li></ul><h3>Events</h3><ul><li><a href="WABOT.html#event:command">command</a></li><li><a href="WABOT.html#event:message">message</a></li><li><a href="WABOT.html#event:onAddedToGroup">onAddedToGroup</a></li><li><a href="WABOT.html#event:onBattery">onBattery</a></li><li><a href="WABOT.html#event:onMessageFromBloqued">onMessageFromBloqued</a></li><li><a href="WABOT.html#event:onMessageFromNoPrivileges">onMessageFromNoPrivileges</a></li><li><a href="WABOT.html#event:onMessageMediaUploadedEvent">onMessageMediaUploadedEvent</a></li><li><a href="WABOT.html#event:onParticipantsChanged">onParticipantsChanged</a></li><li><a href="WABOT.html#event:onPlugged">onPlugged</a></li><li><a href="WABOT.html#event:onRemovedFromGroup">onRemovedFromGroup</a></li><li><a href="WABOT.html#event:onStateChanged">onStateChanged</a></li><li><a href="WABOT.html#event:ready">ready</a></li><li><a href="WABOT.html#event:vcard">vcard</a></li><li><a href="WABOT.html#event:waitNewAcknowledgements">waitNewAcknowledgements</a></li></ul></div>
                 
             </nav>
         </div>
@@ -100,7 +100,7 @@
             <div class="content">
                 <header class="page-title">
                     <p>Source</p>
-                    <h1>WABOT.js</h1>
+                    <h1>src/WABOT.js</h1>
                 </header>
                 
 
@@ -111,6 +111,8 @@
         <article>
             <pre class="prettyprint source linenums"><code>const EventEmitter = require('events');
 const Merge = require('merge-anything');
+const fs = require('fs');
+const path = require('path');
 const _WABOT = require('../lib/browser');
 const ConvertBase64 = require('../lib/convertBase64');
 const Stickers = require('../lib/stickers');
@@ -156,6 +158,10 @@ const replaceAll = (str, term, replacement) => {
  * @param {boolean} opts.intentConfig.showContent - Display chats in browser
  * @param {string} opts.intentConfig.debug - Debug mode for view console logs
  * @param {string[]} opts.intentConfig.removeBgApis - Api keys for https://www.remove.bg
+ * @param {object} opts.intentConfig.plugins - Options for plugins config 
+ * @param {string} opts.intentConfig.plugins.folder - Folder containing the plugins
+ * @param {string[]} opts.intentConfig.plugins.plugins - Array containing the plugin names to use
+ * @param {object} opts.intentConfig.plugins.setup - Configuration of each plugin
  * @param {object} opts.intentConfig.executions - Options for control chats
  * @param {boolean} opts.intentConfig.executions.reponseUsers - Control response to users 
  * @param {boolean} opts.intentConfig.executions.simulateTyping - Simulate typing in chat 
@@ -224,10 +230,16 @@ class WABOT extends EventEmitter {
             this.intentConfig = intentsDefault;
         }
 
-        this.puppeteerConfig = Merge.merge(puppeteerDefault, this.puppeterConfig);
-        this.intentConfig = Merge.merge(intentsDefault, this.intentConfig);
+        this.puppeteerConfig = this.mergeOpts(puppeteerDefault, this.puppeterConfig);
+        this.intentConfig = this.mergeOpts(intentsDefault, this.intentConfig);
 
         this.sticker = new Stickers(this.intentConfig.removeBgApis);
+
+        // Add plugins
+        if (this.intentConfig.plugins.plugins.length > 0) {
+            this.addPlugins(this.intentConfig.plugins);
+        }
+
         this._wabot = new _WABOT({
             puppeteerConfig: this.puppeteerConfig,
             intentConfig: this.intentConfig,
@@ -346,6 +358,10 @@ class WABOT extends EventEmitter {
         })
     }
 
+    mergeOpts (defaultOpts, customOpts) {
+        return Merge.merge(defaultOpts, customOpts);
+    }
+
     emitMessage (type, arg){
         switch (type) {
             case 'message': 
@@ -426,7 +442,7 @@ class WABOT extends EventEmitter {
                         let exactMatch = this.intentConfig.commands.find(obj => obj.exact.find(ex => _message.toLowerCase().trim().indexOf(ex.toLowerCase().trim()) === 0));
                         if (exactMatch != undefined &amp;&amp; exactMatch.params) {
                             let initCommand = exactMatch.exact.find(ex => _message.toLowerCase().trim().indexOf(ex.toLowerCase().trim()) === 0);
-                            let _arguments = _message.replace(initCommand, "").trim();
+                            let _arguments = _message.toLowerCase().replace(initCommand.toLowerCase(), "").trim();
                             response.params = Params.getParams(exactMatch, _arguments);
                             if (typeof exactMatch.params !== 'undefined' &amp;&amp; exactMatch.params.length > 0){
                                 _match = exactMatch;
@@ -605,6 +621,42 @@ class WABOT extends EventEmitter {
         });
     }
 
+    addPlugins (plugins) {
+        if (Array.isArray(plugins.plugins)) {
+            // Read plugins folder
+            const pathPlugins = path.join(__dirname, plugins.folder);
+            fs.readdir(pathPlugins, (err, files) => {
+                if (err) { 
+                    console.error('Error reading plugins directory'); 
+                } else {
+                    let pluginsFiles = [];
+                    files.forEach(file => {
+                        if (file.indexOf('.js') !== -1){
+                            const {id, setup, plugin} = require(path.join(pathPlugins, file));
+                            const metadata = {
+                                id: id,
+                                setup: setup,
+                                plugin: plugin
+                            };
+                            pluginsFiles.push(metadata);
+                        }
+                    });
+
+                    plugins.plugins.forEach(plugin => {
+                        const pluginFile = pluginsFiles.find(el => el.id === plugin);
+                        if (pluginFile !== undefined) {
+                            Object.assign(this, {
+                                [pluginFile.id]: pluginFile.plugin
+                            });
+                            if (typeof plugins.setup[plugin] !== 'undefined') {
+                                pluginFile.setup(plugins.setup[plugin]);
+                            }
+                        }
+                    })
+                }
+            });
+        }
+    }
     /**
      * Send text as image 
      * @param {object} args - The message info

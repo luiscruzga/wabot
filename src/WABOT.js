@@ -1,5 +1,7 @@
 const EventEmitter = require('events');
 const Merge = require('merge-anything');
+const fs = require('fs');
+const path = require('path');
 const _WABOT = require('../lib/browser');
 const ConvertBase64 = require('../lib/convertBase64');
 const Stickers = require('../lib/stickers');
@@ -45,6 +47,10 @@ const replaceAll = (str, term, replacement) => {
  * @param {boolean} opts.intentConfig.showContent - Display chats in browser
  * @param {string} opts.intentConfig.debug - Debug mode for view console logs
  * @param {string[]} opts.intentConfig.removeBgApis - Api keys for https://www.remove.bg
+ * @param {object} opts.intentConfig.plugins - Options for plugins config 
+ * @param {string} opts.intentConfig.plugins.folder - Folder containing the plugins
+ * @param {string[]} opts.intentConfig.plugins.plugins - Array containing the plugin names to use
+ * @param {object} opts.intentConfig.plugins.setup - Configuration of each plugin
  * @param {object} opts.intentConfig.executions - Options for control chats
  * @param {boolean} opts.intentConfig.executions.reponseUsers - Control response to users 
  * @param {boolean} opts.intentConfig.executions.simulateTyping - Simulate typing in chat 
@@ -113,10 +119,16 @@ class WABOT extends EventEmitter {
             this.intentConfig = intentsDefault;
         }
 
-        this.puppeteerConfig = Merge.merge(puppeteerDefault, this.puppeterConfig);
-        this.intentConfig = Merge.merge(intentsDefault, this.intentConfig);
+        this.puppeteerConfig = this.mergeOpts(puppeteerDefault, this.puppeterConfig);
+        this.intentConfig = this.mergeOpts(intentsDefault, this.intentConfig);
 
         this.sticker = new Stickers(this.intentConfig.removeBgApis);
+
+        // Add plugins
+        if (this.intentConfig.plugins.plugins.length > 0) {
+            this.addPlugins(this.intentConfig.plugins);
+        }
+
         this._wabot = new _WABOT({
             puppeteerConfig: this.puppeteerConfig,
             intentConfig: this.intentConfig,
@@ -235,6 +247,10 @@ class WABOT extends EventEmitter {
         })
     }
 
+    mergeOpts (defaultOpts, customOpts) {
+        return Merge.merge(defaultOpts, customOpts);
+    }
+
     emitMessage (type, arg){
         switch (type) {
             case 'message': 
@@ -315,7 +331,7 @@ class WABOT extends EventEmitter {
                         let exactMatch = this.intentConfig.commands.find(obj => obj.exact.find(ex => _message.toLowerCase().trim().indexOf(ex.toLowerCase().trim()) === 0));
                         if (exactMatch != undefined && exactMatch.params) {
                             let initCommand = exactMatch.exact.find(ex => _message.toLowerCase().trim().indexOf(ex.toLowerCase().trim()) === 0);
-                            let _arguments = _message.replace(initCommand, "").trim();
+                            let _arguments = _message.toLowerCase().replace(initCommand.toLowerCase(), "").trim();
                             response.params = Params.getParams(exactMatch, _arguments);
                             if (typeof exactMatch.params !== 'undefined' && exactMatch.params.length > 0){
                                 _match = exactMatch;
@@ -494,6 +510,42 @@ class WABOT extends EventEmitter {
         });
     }
 
+    addPlugins (plugins) {
+        if (Array.isArray(plugins.plugins)) {
+            // Read plugins folder
+            const pathPlugins = path.join(__dirname, plugins.folder);
+            fs.readdir(pathPlugins, (err, files) => {
+                if (err) { 
+                    console.error('Error reading plugins directory'); 
+                } else {
+                    let pluginsFiles = [];
+                    files.forEach(file => {
+                        if (file.indexOf('.js') !== -1){
+                            const {id, setup, plugin} = require(path.join(pathPlugins, file));
+                            const metadata = {
+                                id: id,
+                                setup: setup,
+                                plugin: plugin
+                            };
+                            pluginsFiles.push(metadata);
+                        }
+                    });
+
+                    plugins.plugins.forEach(plugin => {
+                        const pluginFile = pluginsFiles.find(el => el.id === plugin);
+                        if (pluginFile !== undefined) {
+                            Object.assign(this, {
+                                [pluginFile.id]: pluginFile.plugin
+                            });
+                            if (typeof plugins.setup[plugin] !== 'undefined') {
+                                pluginFile.setup(plugins.setup[plugin]);
+                            }
+                        }
+                    })
+                }
+            });
+        }
+    }
     /**
      * Send text as image 
      * @param {object} args - The message info

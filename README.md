@@ -46,6 +46,33 @@ You can find all documentation here [Documentation](https://luiscruzga.github.io
 | Custom commands | ✅ |
 | Valid responses | ✅ |
 
+
+## Plugins 
+
+The creation of new plugins is allowed to automate some tasks and achieve incorporation as a new method of the wabot class.
+
+To create a new plugin it is required to export an object with the following properties:
+
+ - Id: Plugin identifier (name)
+ - setup: Initial configuration function with configuration parameters (optional function)
+ - plugin: Function that contains the actions to be performed by the plugin, this function will have access to all the methods of the wabot function by using "this"
+
+Once the plugin is created, the "plugins" parameter must be configured at the time of instantiating WABOT through intentsConfig, then the possible modules to be used by the plugin must be installed separately through the console by "npm install module_name".
+
+Below is a list of the plugins that come by default incorporated with the module:
+
+| Plugin| Description |
+| ------------- | ------------- |
+| Anime | Plugin to transform your selfie into an anime portrait using minivision photo2cartoon |
+| Cartoon | Plugin to transform your selfie into an cartoon portrait using |
+| Coronavirus | Plugin to obtain information on the coronavirus by countries, cases, deaths, etc |
+| Music | Plugin to get a song in mp3 format directly from soundcloud |
+| News | Plugin to get news from the different rss sources that are configured |
+| Wiki | Plugin that allows the search of different things in wikipedia |
+| Youtube | Plugin that allows you to search for videos directly from YouTube |
+| Zombie | Plugin that allows you to transform your selfie into a zombie |
+
+
 ## Example usage
 
 ```js
@@ -159,6 +186,125 @@ const  commands = [
 		"name":  "contacto",
 		"contains": [],
 		"exact": ["contacto", "@contacto"]
+	},
+	{
+		"name":  "makeZombie",
+		"contains": [],
+		"exact": ["@makezombie", "@zombie", "zombie", "makezombie"]
+	},
+	{
+		"name":  "getWiki",
+		"contains": [],
+		"exact": ["@wiki", "wiki", "wikipedia", "@wikipedia"],
+		"params": [
+			{
+				"name":  "search",
+				"isNumber":  false,
+				"request": [
+					"*Indicame que quieres buscar:*",
+					"*¿Qué deseas buscar?:*"
+				],
+				"values":  "any",
+				"badResponse": [
+					"Por favor ingresa un valor válido.",
+					"Tu busqueda es incorrecta, ingresa un valor válido."
+				]
+			}
+		]
+	},
+	{
+		"name":  "getCoronavirus",
+		"contains": [],
+		"exact": ["@coronavirus", "coronavirus", "covid", "covid", "@virus", "virus"],
+		"params": [
+			{
+				"name":  "search",
+				"required": false,
+				"isNumber":  false,
+				"request": [
+					"*Indicame que quieres buscar:*",
+					"*¿Qué deseas buscar?:*"
+				],
+				"values":  "any",
+				"badResponse": [
+					"Por favor ingresa un valor válido.",
+					"Tu busqueda es incorrecta, ingresa un valor válido."
+				]
+			}
+		]
+	},
+	{
+		"name":  "getYoutube",
+		"contains": [],
+		"exact": ["@youtube", "youtube"],
+		"params": [
+			{
+				"name":  "search",
+				"required": true,
+				"isNumber":  false,
+				"request": [
+					"*Indicame que quieres buscar:*",
+					"*¿Qué deseas buscar?:*"
+				],
+				"values":  "any",
+				"badResponse": [
+					"Por favor ingresa un valor válido.",
+					"Tu busqueda es incorrecta, ingresa un valor válido."
+				]
+			}
+		]
+	},
+	{
+		"name":  "getCartoon",
+		"contains": [],
+		"exact": ["@cartoon", "cartoon"]
+	},
+	{
+		"name":  "getMusic",
+		"contains": [],
+		"exact": ["@music", "music", "@musica", "musica", "música", "@song", "song"],
+		"params": [
+			{
+				"name":  "search",
+				"required": true,
+				"isNumber":  false,
+				"request": [
+					"*Indicame que canción quieres buscar:*",
+					"*¿Qué canción deseas buscar?:*"
+				],
+				"values":  "any",
+				"badResponse": [
+					"Por favor ingresa un valor válido.",
+					"Tu búsqueda es incorrecta, ingresa un valor válido."
+				]
+			}
+		]
+	},
+	{
+		"name":  "getAnime",
+		"contains": [],
+		"exact": ["@anime", "anime"]
+	},
+	{
+		"name":  "getNews",
+		"contains": [],
+		"exact": ["@news", "news", "@noticias", "noticias", "@noticia", "noticia"],
+		"params": [
+			{
+				"name":  "search",
+				"required": false,
+				"isNumber":  false,
+				"request": [
+					"*Indicame que quieres buscar:*",
+					"*¿Qué deseas buscar?:*"
+				],
+				"values":  "any",
+				"badResponse": [
+					"Por favor ingresa un valor válido.",
+					"Tu busqueda es incorrecta, ingresa un valor válido."
+				]
+			}
+		]
 	}
 ];
 
@@ -174,6 +320,32 @@ const  wabot = new  WABOT({
 			simulateTyping:  true,
 		},
 		removeBgApis: [ "pUXZvFuC7ZE4y3FcroP56fdf" ],
+		plugins: {
+			folder: "../plugins",
+			plugins: ['makeZombie', 'wiki', 'coronavirus', 'youtube', 'cartoon', 'music', 'anime', 'news'],
+			setup: {
+				"news": { 
+					"timeRefresh": 10,
+					"feeds": [
+						"http://feeds.feedburner.com/soychilecl-todas",
+						"https://feeds.feedburner.com/fayerwayer",
+						"http://www.bbc.co.uk/mundo/ultimas_noticias/index.xml",
+						"https://news.google.com/news/rss/?ned=es_cl&gl=CL&hl=es-419"
+					]
+				},
+				"cartoon": {
+					"apiKey": "7dc8f27d-1aae-4b13-92e3-76d1abde2529"
+				},
+				"anime": {
+					"appKey": "118a0c9f6df048fe86bd415c8d1cdcb8",
+					"token": "34a575f44c23a915969317ffac1ef60f",
+					"timestamp": "1607695579320"
+				},
+				"music": {
+					"clientId": "ymSs5c4hxrRu3yuA6ZyOORoADJI2tVPD"
+				}
+			}
+		},
 		commands:  commands
 	}
 });
@@ -292,6 +464,64 @@ wabot.on('status_onda', (res) => {
 	});
 });
 
+wabot.on('makeZombie', (res) => {
+    wabot.makeZombie({
+        "idChat": res.data.from,
+        "photo": res.media
+    });
+});
+
+wabot.on('getWiki', (res) => {
+    wabot.wiki({
+		"idChat": res.data.from,
+		"language": "es",
+        "search": res.params.search
+    });
+});
+
+wabot.on('getCoronavirus', (res) => {
+    wabot.coronavirus({
+		"idChat": res.data.from,
+		"headers": ["Pais", "Casos", "Hoy", "Muertes", "Recuperados", "Activos"],
+        "search": res.params.search || ''
+    });
+});
+
+wabot.on('getYoutube', (res) => {
+    wabot.youtube({
+		"idChat": res.data.from,
+        "search": res.params.search
+    });
+});
+
+wabot.on('getCartoon', (res) => {
+    wabot.cartoon({
+        "idChat": res.data.from,
+		"photo": res.media || ''
+    });
+});
+
+wabot.on('getMusic', (res) => {
+    wabot.music({
+		"idChat": res.data.from,
+        "search": res.params.search
+    });
+});
+
+wabot.on('getAnime', (res) => {
+    wabot.anime({
+        "idChat": res.data.from,
+		"photo": res.media || ''
+    });
+});
+
+wabot.on('getNews', (res) => {
+    wabot.news({
+		"idChat": res.data.from,
+        "search": res.params.search || ''
+    });
+});
+
 wabot.on('ready', (session) => {
 	console.log('READY', session);
 	//console.log('Clossing Session');
@@ -348,6 +578,11 @@ Wabot accepts different startup options, then the default options.
 	"showContent": false,
 	"debug": false,
 	"removeBgApis": [],
+	"plugins": {
+        "folder": "../plugins",
+        "plugins": [],
+        "setup": {}
+    },
 	"executions": {
 		"reponseUsers": true,
 		"simulateTyping": false,

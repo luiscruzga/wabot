@@ -123,11 +123,30 @@ window.responseServer = async (response) => {
             break;
         case 'link':
             if (response.replyMessage){
-                //WAPI.sendMessageWithThumb(response.thumb, response.link, response.title, response.description, response.idChat, response.idMessage);
-                WAPI.sendLinkWithAutoPreview(response.idChat, response.link, response.caption, response.idMessage);
+                if (response.thumb && response.thumb !== ''){
+                    WAPI.sendMessageWithThumb(
+                        response.thumb
+                        ,response.link
+                        ,response.title || ''
+                        ,response.description || ''
+                        ,response.idChat
+                        ,response.idMessage
+                    );
+                } else {
+                    WAPI.sendLinkWithAutoPreview(response.idChat, response.link, response.caption, response.idMessage);
+                }
             }else {
-                //WAPI.sendMessageWithThumb(response.thumb, response.link, response.title, response.description, response.idChat);
-                WAPI.sendLinkWithAutoPreview(response.idChat, response.link, response.caption);
+                if (response.thumb && response.thumb !== ''){
+                    WAPI.sendMessageWithThumb(
+                        response.thumb
+                        ,response.link
+                        ,response.title || ''
+                        ,response.description || ''
+                        ,response.idChat
+                    );
+                } else {
+                    WAPI.sendLinkWithAutoPreview(response.idChat, response.link, response.caption);
+                }
             }
             break;
         case 'location':

@@ -90,7 +90,7 @@
             
             <nav>
                 
-                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="WABOT.html">WABOT</a></li></ul><h3>Events</h3><ul><li><a href="WABOT.html#event:command">command</a></li><li><a href="WABOT.html#event:message">message</a></li><li><a href="WABOT.html#event:onAddedToGroup">onAddedToGroup</a></li><li><a href="WABOT.html#event:onBattery">onBattery</a></li><li><a href="WABOT.html#event:onMessageFromBloqued">onMessageFromBloqued</a></li><li><a href="WABOT.html#event:onMessageFromNoPrivileges">onMessageFromNoPrivileges</a></li><li><a href="WABOT.html#event:onMessageMediaUploadedEvent">onMessageMediaUploadedEvent</a></li><li><a href="WABOT.html#event:onParticipantsChanged">onParticipantsChanged</a></li><li><a href="WABOT.html#event:onPlugged">onPlugged</a></li><li><a href="WABOT.html#event:onRemovedFromGroup">onRemovedFromGroup</a></li><li><a href="WABOT.html#event:onStateChanged">onStateChanged</a></li><li><a href="WABOT.html#event:ready">ready</a></li><li><a href="WABOT.html#event:vcard">vcard</a></li><li><a href="WABOT.html#event:waitNewAcknowledgements">waitNewAcknowledgements</a></li></ul></div>
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Namespaces</h3><ul><li><a href="Plugins.html">Plugins</a></li></ul><h3>Classes</h3><ul><li><a href="WABOT.html">WABOT</a></li></ul><h3>Events</h3><ul><li><a href="WABOT.html#event:command">command</a></li><li><a href="WABOT.html#event:message">message</a></li><li><a href="WABOT.html#event:onAddedToGroup">onAddedToGroup</a></li><li><a href="WABOT.html#event:onBattery">onBattery</a></li><li><a href="WABOT.html#event:onMessageFromBloqued">onMessageFromBloqued</a></li><li><a href="WABOT.html#event:onMessageFromNoPrivileges">onMessageFromNoPrivileges</a></li><li><a href="WABOT.html#event:onMessageMediaUploadedEvent">onMessageMediaUploadedEvent</a></li><li><a href="WABOT.html#event:onParticipantsChanged">onParticipantsChanged</a></li><li><a href="WABOT.html#event:onPlugged">onPlugged</a></li><li><a href="WABOT.html#event:onRemovedFromGroup">onRemovedFromGroup</a></li><li><a href="WABOT.html#event:onStateChanged">onStateChanged</a></li><li><a href="WABOT.html#event:ready">ready</a></li><li><a href="WABOT.html#event:vcard">vcard</a></li><li><a href="WABOT.html#event:waitNewAcknowledgements">waitNewAcknowledgements</a></li></ul></div>
                 
             </nav>
         </div>
@@ -107,7 +107,7 @@
     
 
 
-    <h3>wabot 1.1.0</h3>
+    <h3>wabot 1.1.2</h3>
 
 
 
@@ -131,6 +131,8 @@
 <pre><code>npm i wabot
 </code></pre>
 <p>NOTE: Node 10.15.0+ is required</p>
+<h2>Documentation</h2>
+<p>You can find all documentation here <a href="https://luiscruzga.github.io/wabot/">Documentation</a></p>
 <h2>Supported features</h2>
 <table>
 <thead>
@@ -250,6 +252,58 @@
 </tr>
 </tbody>
 </table>
+<h2>Plugins</h2>
+<p>The creation of new plugins is allowed to automate some tasks and achieve incorporation as a new method of the wabot class.</p>
+<p>To create a new plugin it is required to export an object with the following properties:</p>
+<ul>
+<li>Id: Plugin identifier (name)</li>
+<li>setup: Initial configuration function with configuration parameters (optional function)</li>
+<li>plugin: Function that contains the actions to be performed by the plugin, this function will have access to all the methods of the wabot function by using &quot;this&quot;</li>
+</ul>
+<p>Once the plugin is created, the &quot;plugins&quot; parameter must be configured at the time of instantiating WABOT through intentsConfig, then the possible modules to be used by the plugin must be installed separately through the console by &quot;npm install module_name&quot;.</p>
+<p>Below is a list of the plugins that come by default incorporated with the module:</p>
+<table>
+<thead>
+<tr>
+<th>Plugin</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Anime</td>
+<td>Plugin to transform your selfie into an anime portrait using minivision photo2cartoon</td>
+</tr>
+<tr>
+<td>Cartoon</td>
+<td>Plugin to transform your selfie into an cartoon portrait using</td>
+</tr>
+<tr>
+<td>Coronavirus</td>
+<td>Plugin to obtain information on the coronavirus by countries, cases, deaths, etc</td>
+</tr>
+<tr>
+<td>Music</td>
+<td>Plugin to get a song in mp3 format directly from soundcloud</td>
+</tr>
+<tr>
+<td>News</td>
+<td>Plugin to get news from the different rss sources that are configured</td>
+</tr>
+<tr>
+<td>Wiki</td>
+<td>Plugin that allows the search of different things in wikipedia</td>
+</tr>
+<tr>
+<td>Youtube</td>
+<td>Plugin that allows you to search for videos directly from YouTube</td>
+</tr>
+<tr>
+<td>Zombie</td>
+<td>Plugin that allows you to transform your selfie into a zombie</td>
+</tr>
+</tbody>
+</table>
 <h2>Example usage</h2>
 <pre class="prettyprint source lang-js"><code>const  WABOT = require('wabot');
 const  path = require('path');
@@ -361,6 +415,125 @@ const  commands = [
 		&quot;name&quot;:  &quot;contacto&quot;,
 		&quot;contains&quot;: [],
 		&quot;exact&quot;: [&quot;contacto&quot;, &quot;@contacto&quot;]
+	},
+	{
+		&quot;name&quot;:  &quot;makeZombie&quot;,
+		&quot;contains&quot;: [],
+		&quot;exact&quot;: [&quot;@makezombie&quot;, &quot;@zombie&quot;, &quot;zombie&quot;, &quot;makezombie&quot;]
+	},
+	{
+		&quot;name&quot;:  &quot;getWiki&quot;,
+		&quot;contains&quot;: [],
+		&quot;exact&quot;: [&quot;@wiki&quot;, &quot;wiki&quot;, &quot;wikipedia&quot;, &quot;@wikipedia&quot;],
+		&quot;params&quot;: [
+			{
+				&quot;name&quot;:  &quot;search&quot;,
+				&quot;isNumber&quot;:  false,
+				&quot;request&quot;: [
+					&quot;*Indicame que quieres buscar:*&quot;,
+					&quot;*¿Qué deseas buscar?:*&quot;
+				],
+				&quot;values&quot;:  &quot;any&quot;,
+				&quot;badResponse&quot;: [
+					&quot;Por favor ingresa un valor válido.&quot;,
+					&quot;Tu busqueda es incorrecta, ingresa un valor válido.&quot;
+				]
+			}
+		]
+	},
+	{
+		&quot;name&quot;:  &quot;getCoronavirus&quot;,
+		&quot;contains&quot;: [],
+		&quot;exact&quot;: [&quot;@coronavirus&quot;, &quot;coronavirus&quot;, &quot;covid&quot;, &quot;covid&quot;, &quot;@virus&quot;, &quot;virus&quot;],
+		&quot;params&quot;: [
+			{
+				&quot;name&quot;:  &quot;search&quot;,
+				&quot;required&quot;: false,
+				&quot;isNumber&quot;:  false,
+				&quot;request&quot;: [
+					&quot;*Indicame que quieres buscar:*&quot;,
+					&quot;*¿Qué deseas buscar?:*&quot;
+				],
+				&quot;values&quot;:  &quot;any&quot;,
+				&quot;badResponse&quot;: [
+					&quot;Por favor ingresa un valor válido.&quot;,
+					&quot;Tu busqueda es incorrecta, ingresa un valor válido.&quot;
+				]
+			}
+		]
+	},
+	{
+		&quot;name&quot;:  &quot;getYoutube&quot;,
+		&quot;contains&quot;: [],
+		&quot;exact&quot;: [&quot;@youtube&quot;, &quot;youtube&quot;],
+		&quot;params&quot;: [
+			{
+				&quot;name&quot;:  &quot;search&quot;,
+				&quot;required&quot;: true,
+				&quot;isNumber&quot;:  false,
+				&quot;request&quot;: [
+					&quot;*Indicame que quieres buscar:*&quot;,
+					&quot;*¿Qué deseas buscar?:*&quot;
+				],
+				&quot;values&quot;:  &quot;any&quot;,
+				&quot;badResponse&quot;: [
+					&quot;Por favor ingresa un valor válido.&quot;,
+					&quot;Tu busqueda es incorrecta, ingresa un valor válido.&quot;
+				]
+			}
+		]
+	},
+	{
+		&quot;name&quot;:  &quot;getCartoon&quot;,
+		&quot;contains&quot;: [],
+		&quot;exact&quot;: [&quot;@cartoon&quot;, &quot;cartoon&quot;]
+	},
+	{
+		&quot;name&quot;:  &quot;getMusic&quot;,
+		&quot;contains&quot;: [],
+		&quot;exact&quot;: [&quot;@music&quot;, &quot;music&quot;, &quot;@musica&quot;, &quot;musica&quot;, &quot;música&quot;, &quot;@song&quot;, &quot;song&quot;],
+		&quot;params&quot;: [
+			{
+				&quot;name&quot;:  &quot;search&quot;,
+				&quot;required&quot;: true,
+				&quot;isNumber&quot;:  false,
+				&quot;request&quot;: [
+					&quot;*Indicame que canción quieres buscar:*&quot;,
+					&quot;*¿Qué canción deseas buscar?:*&quot;
+				],
+				&quot;values&quot;:  &quot;any&quot;,
+				&quot;badResponse&quot;: [
+					&quot;Por favor ingresa un valor válido.&quot;,
+					&quot;Tu búsqueda es incorrecta, ingresa un valor válido.&quot;
+				]
+			}
+		]
+	},
+	{
+		&quot;name&quot;:  &quot;getAnime&quot;,
+		&quot;contains&quot;: [],
+		&quot;exact&quot;: [&quot;@anime&quot;, &quot;anime&quot;]
+	},
+	{
+		&quot;name&quot;:  &quot;getNews&quot;,
+		&quot;contains&quot;: [],
+		&quot;exact&quot;: [&quot;@news&quot;, &quot;news&quot;, &quot;@noticias&quot;, &quot;noticias&quot;, &quot;@noticia&quot;, &quot;noticia&quot;],
+		&quot;params&quot;: [
+			{
+				&quot;name&quot;:  &quot;search&quot;,
+				&quot;required&quot;: false,
+				&quot;isNumber&quot;:  false,
+				&quot;request&quot;: [
+					&quot;*Indicame que quieres buscar:*&quot;,
+					&quot;*¿Qué deseas buscar?:*&quot;
+				],
+				&quot;values&quot;:  &quot;any&quot;,
+				&quot;badResponse&quot;: [
+					&quot;Por favor ingresa un valor válido.&quot;,
+					&quot;Tu busqueda es incorrecta, ingresa un valor válido.&quot;
+				]
+			}
+		]
 	}
 ];
 
@@ -376,6 +549,32 @@ const  wabot = new  WABOT({
 			simulateTyping:  true,
 		},
 		removeBgApis: [ &quot;pUXZvFuC7ZE4y3FcroP56fdf&quot; ],
+		plugins: {
+			folder: &quot;../plugins&quot;,
+			plugins: ['makeZombie', 'wiki', 'coronavirus', 'youtube', 'cartoon', 'music', 'anime', 'news'],
+			setup: {
+				&quot;news&quot;: { 
+					&quot;timeRefresh&quot;: 10,
+					&quot;feeds&quot;: [
+						&quot;http://feeds.feedburner.com/soychilecl-todas&quot;,
+						&quot;https://feeds.feedburner.com/fayerwayer&quot;,
+						&quot;http://www.bbc.co.uk/mundo/ultimas_noticias/index.xml&quot;,
+						&quot;https://news.google.com/news/rss/?ned=es_cl&gl=CL&hl=es-419&quot;
+					]
+				},
+				&quot;cartoon&quot;: {
+					&quot;apiKey&quot;: &quot;7dc8f27d-1aae-4b13-92e3-76d1abde2529&quot;
+				},
+				&quot;anime&quot;: {
+					&quot;appKey&quot;: &quot;118a0c9f6df048fe86bd415c8d1cdcb8&quot;,
+					&quot;token&quot;: &quot;34a575f44c23a915969317ffac1ef60f&quot;,
+					&quot;timestamp&quot;: &quot;1607695579320&quot;
+				},
+				&quot;music&quot;: {
+					&quot;clientId&quot;: &quot;ymSs5c4hxrRu3yuA6ZyOORoADJI2tVPD&quot;
+				}
+			}
+		},
 		commands:  commands
 	}
 });
@@ -494,6 +693,64 @@ wabot.on('status_onda', (res) => {
 	});
 });
 
+wabot.on('makeZombie', (res) => {
+    wabot.makeZombie({
+        &quot;idChat&quot;: res.data.from,
+        &quot;photo&quot;: res.media
+    });
+});
+
+wabot.on('getWiki', (res) => {
+    wabot.wiki({
+		&quot;idChat&quot;: res.data.from,
+		&quot;language&quot;: &quot;es&quot;,
+        &quot;search&quot;: res.params.search
+    });
+});
+
+wabot.on('getCoronavirus', (res) => {
+    wabot.coronavirus({
+		&quot;idChat&quot;: res.data.from,
+		&quot;headers&quot;: [&quot;Pais&quot;, &quot;Casos&quot;, &quot;Hoy&quot;, &quot;Muertes&quot;, &quot;Recuperados&quot;, &quot;Activos&quot;],
+        &quot;search&quot;: res.params.search || ''
+    });
+});
+
+wabot.on('getYoutube', (res) => {
+    wabot.youtube({
+		&quot;idChat&quot;: res.data.from,
+        &quot;search&quot;: res.params.search
+    });
+});
+
+wabot.on('getCartoon', (res) => {
+    wabot.cartoon({
+        &quot;idChat&quot;: res.data.from,
+		&quot;photo&quot;: res.media || ''
+    });
+});
+
+wabot.on('getMusic', (res) => {
+    wabot.music({
+		&quot;idChat&quot;: res.data.from,
+        &quot;search&quot;: res.params.search
+    });
+});
+
+wabot.on('getAnime', (res) => {
+    wabot.anime({
+        &quot;idChat&quot;: res.data.from,
+		&quot;photo&quot;: res.media || ''
+    });
+});
+
+wabot.on('getNews', (res) => {
+    wabot.news({
+		&quot;idChat&quot;: res.data.from,
+        &quot;search&quot;: res.params.search || ''
+    });
+});
+
 wabot.on('ready', (session) => {
 	console.log('READY', session);
 	//console.log('Clossing Session');
@@ -546,6 +803,11 @@ wabot.start();
 	&quot;showContent&quot;: false,
 	&quot;debug&quot;: false,
 	&quot;removeBgApis&quot;: [],
+	&quot;plugins&quot;: {
+        &quot;folder&quot;: &quot;../plugins&quot;,
+        &quot;plugins&quot;: [],
+        &quot;setup&quot;: {}
+    },
 	&quot;executions&quot;: {
 		&quot;reponseUsers&quot;: true,
 		&quot;simulateTyping&quot;: false,

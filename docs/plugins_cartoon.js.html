@@ -1,0 +1,240 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wabot Documentation plugins/cartoon.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">Wabot Documentation</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                 
+                    
+                        <a
+                            class="link user-link "
+                            href="https://github.com/luiscruzga/wabot"
+                        >
+                            Github
+                        </a>
+                    
+                        <a
+                            class="link user-link "
+                            href="https://github.com/luiscruzga/wabot/blob/master/example/test.js"
+                        >
+                            Example
+                        </a>
+                    
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+                <div class="search-wrapper">
+                    <input id="search" type="text" placeholder="Search docs..." class="input">
+                </div>
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Namespaces</h3><ul><li><a href="Plugins.html">Plugins</a></li></ul><h3>Classes</h3><ul><li><a href="WABOT.html">WABOT</a></li></ul><h3>Events</h3><ul><li><a href="WABOT.html#event:command">command</a></li><li><a href="WABOT.html#event:message">message</a></li><li><a href="WABOT.html#event:onAddedToGroup">onAddedToGroup</a></li><li><a href="WABOT.html#event:onBattery">onBattery</a></li><li><a href="WABOT.html#event:onMessageFromBloqued">onMessageFromBloqued</a></li><li><a href="WABOT.html#event:onMessageFromNoPrivileges">onMessageFromNoPrivileges</a></li><li><a href="WABOT.html#event:onMessageMediaUploadedEvent">onMessageMediaUploadedEvent</a></li><li><a href="WABOT.html#event:onParticipantsChanged">onParticipantsChanged</a></li><li><a href="WABOT.html#event:onPlugged">onPlugged</a></li><li><a href="WABOT.html#event:onRemovedFromGroup">onRemovedFromGroup</a></li><li><a href="WABOT.html#event:onStateChanged">onStateChanged</a></li><li><a href="WABOT.html#event:ready">ready</a></li><li><a href="WABOT.html#event:vcard">vcard</a></li><li><a href="WABOT.html#event:waitNewAcknowledgements">waitNewAcknowledgements</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>plugins/cartoon.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// Modules to install separately
+const deepai = require('deepai');
+const fs = require('fs');
+const path = require('path');
+const base64 = require('node-base64-image');
+const ConvertBase64 = require('../lib/convertBase64');
+const convert64 = new ConvertBase64();
+var apiKey = '';
+
+function randomUUI(a,b){for(b=a='';a++&lt;36;b+=a*51&amp;52?(a^15?8^Math.random()*(a^20?16:4):4).toString(16):'');return b}
+
+const defaultConfig = {
+    idChat: '',
+    photo: '',
+    messageError: '*Ooops, an error occurred while trying to transform the image, try again later*',
+    messageNoImage: '*You need to attach an image to continue*'
+}
+/**
+ * Plugin to transform your selfie into an cartoon portrait using 
+ * @function cartoon
+ * @memberof Plugins
+ * @param {string} idChat - Chat id to send the new image to
+ * @param {string} photo - Url, path to base64 image
+ * @param {string} messageError - Message to send in case of error
+ * @param {string} messageNoImage - Message to send in case of not receiving an image
+ * @see {@link https://deepai.org/machine-learning-model/toonify|DeepAiToonify}
+ */
+module.exports = {
+    /**
+    * Id - Name of the plugin to use
+    * @property {string}  id - Name of the plugin to use
+    */
+    id: 'cartoon',
+    /**
+    * Initial setting function
+    * @param {object} data - Initial information for the plugin
+    * @param {string} data.apiKey
+    */
+    setup(data) {
+        if (data.apiKey &amp;&amp; data.apiKey !== '') {
+            apiKey = data.apiKey;
+            deepai.setApiKey(apiKey);
+        }
+    },
+    plugin(_args) {
+        const _this = this;
+        const args = _this.mergeOpts(defaultConfig, _args);
+        if (args.idChat !== '') {
+            if (typeof args.photo !== 'undefined' &amp;&amp; args.photo !== '') {
+                if (apiKey === '') {
+                    console.error('An api key must be provided.');
+                } else {
+                    convert64.convert(args.photo)
+                    .then(async (res) => {
+                        let nameFile = randomUUI();
+                        let pathImage = path.join(__dirname, `./images/${ nameFile }.jpeg`);
+                        let base64Image = res.split(';base64,').pop();
+                        fs.writeFileSync(pathImage, base64Image, {encoding: 'base64'}, (err) => {
+                            if(err) log.error('File created with error');
+                        });
+                        var resp = await deepai.callStandardApi("toonify", {
+                            image: fs.createReadStream(pathImage)
+                        });
+                        fs.unlinkSync(pathImage);
+                        if (typeof resp.output_url !== 'undefined'){
+                            let options = {string: true}
+                            base64.encode(resp.output_url, options, function(err, data64){
+                                if(err){
+                                    _this.sendMessage({
+                                        "idChat": args.idChat, 
+                                        "message": args.messageError
+                                    });
+                                }else{
+                                    _this.sendImage({
+                                        "idChat": args.idChat, 
+                                        "caption": "",
+                                        "file": data64
+                                    })
+                                }
+                            })
+                        }
+                    })
+                    .catch(err => {
+                        _this.sendMessage({
+                            "idChat": args.idChat, 
+                            "message": args.messageError
+                        });
+                    })
+                }
+            } else {
+                _this.sendMessage({
+                    "idChat": args.idChat, 
+                    "message": args.messageNoImage
+                });
+            }
+        }
+    }
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+<script src="scripts/search.js"> </script>
+
+</body>
+</html>

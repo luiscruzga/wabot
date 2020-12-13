@@ -47,32 +47,47 @@ const assignParams = (userParams, intent) => {
 }
 
 Params.getParams = (_command, arguments) => {
-    let params = [];
-    let paramsRegex = arguments.match(argument_regex1);
-    if (paramsRegex){
-        paramsRegex.forEach((_param) => {
-            arguments = arguments.replace(_param, '').trim();
-            params.push(replaceAll(_param, '"', ''));
-        });
-    }
-    paramsRegex = arguments.match(argument_regex2);
-    if (paramsRegex){
-        paramsRegex.forEach((_param) => {
-            arguments = arguments.replace(_param, '').trim();
-            params.push(replaceAll(_param, "'", ""));
-        });
-    }
-    Array.prototype.push.apply(params, arguments.split(' '));
-    params = params.filter(el => el !== '');
+    if (_command.params 
+        && _command.params.length === 1
+        && _command.params[0].values === 'any'
+    ){ 
+        let value = {}
+        value[_command.params[0].name] = arguments;
+        return value;
+    } else {
+        let params = [];
+        let paramsRegex = arguments.match(argument_regex1);
+        if (paramsRegex){
+            paramsRegex.forEach((_param) => {
+                arguments = arguments.replace(_param, '').trim();
+                params.push(replaceAll(_param, '"', ''));
+            });
+        }
+        paramsRegex = arguments.match(argument_regex2);
+        if (paramsRegex){
+            paramsRegex.forEach((_param) => {
+                arguments = arguments.replace(_param, '').trim();
+                params.push(replaceAll(_param, "'", ""));
+            });
+        }
+        Array.prototype.push.apply(params, arguments.split(' '));
+        params = params.filter(el => el !== '');
 
-    let values = assignParams(params, _command);
-    return values;
+        let values = assignParams(params, _command);
+        return values;
+    }
 }
 
 Params.getNextPendingValue = (_command, values) => {
     let pendingValues = Object.keys(values).filter(key => values[key] === '');
     if (pendingValues.length > 0){
-        return _command.params.findIndex(command => command.name === pendingValues[0]);
+        return _command.params.findIndex(command => (
+                command.name === pendingValues[0] 
+                && ( 
+                    (typeof command.required !== 'undefined' && command.required)
+                    || (typeof command.required === 'undefined')
+                )
+            ));
     } else {
         return 'no_data';
     }

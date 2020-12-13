@@ -1,0 +1,277 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wabot Documentation plugins/wiki.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">Wabot Documentation</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                 
+                    
+                        <a
+                            class="link user-link "
+                            href="https://github.com/luiscruzga/wabot"
+                        >
+                            Github
+                        </a>
+                    
+                        <a
+                            class="link user-link "
+                            href="https://github.com/luiscruzga/wabot/blob/master/example/test.js"
+                        >
+                            Example
+                        </a>
+                    
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+                <div class="search-wrapper">
+                    <input id="search" type="text" placeholder="Search docs..." class="input">
+                </div>
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Namespaces</h3><ul><li><a href="Plugins.html">Plugins</a></li></ul><h3>Classes</h3><ul><li><a href="WABOT.html">WABOT</a></li></ul><h3>Events</h3><ul><li><a href="WABOT.html#event:command">command</a></li><li><a href="WABOT.html#event:message">message</a></li><li><a href="WABOT.html#event:onAddedToGroup">onAddedToGroup</a></li><li><a href="WABOT.html#event:onBattery">onBattery</a></li><li><a href="WABOT.html#event:onMessageFromBloqued">onMessageFromBloqued</a></li><li><a href="WABOT.html#event:onMessageFromNoPrivileges">onMessageFromNoPrivileges</a></li><li><a href="WABOT.html#event:onMessageMediaUploadedEvent">onMessageMediaUploadedEvent</a></li><li><a href="WABOT.html#event:onParticipantsChanged">onParticipantsChanged</a></li><li><a href="WABOT.html#event:onPlugged">onPlugged</a></li><li><a href="WABOT.html#event:onRemovedFromGroup">onRemovedFromGroup</a></li><li><a href="WABOT.html#event:onStateChanged">onStateChanged</a></li><li><a href="WABOT.html#event:ready">ready</a></li><li><a href="WABOT.html#event:vcard">vcard</a></li><li><a href="WABOT.html#event:waitNewAcknowledgements">waitNewAcknowledgements</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>plugins/wiki.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// Modules to install separately
+const request = require('request');
+const fs = require('fs');
+const path = require('path');
+var Xray = require('x-ray');
+var cheerio = require('cheerio');
+const googleIt = require('google-it');
+
+const urlWiki = 'https://{{language}}.wikipedia.org/wiki/';
+
+function escapeRegExp(string){
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&amp;");
+}
+
+function replaceAll(str, term, replacement) {
+  	return str.replace(new RegExp(escapeRegExp(term), 'g'), replacement);
+}
+
+var searchWikipedia = function(in_url, in_language){
+	return new Promise(function(resolve, reject) {
+		var xray = Xray();
+
+		var metadata = {
+			'TITLE': decodeURIComponent(replaceAll(in_url.replace(urlWiki.replace('{{language}}', in_language), ''), '_', ' ')),
+			'DEFINITION': '',
+			'IMAGE': ''
+		};
+		
+        xray(in_url, 'body@html')(function(err, body){
+            if (!err){
+                var $ = cheerio.load(body);
+                var results = [];
+                var definicion = '';
+
+				const summaries = [];
+				let display = true;
+				let title
+				$('div#mw-content-text > .mw-parser-output').children('div,p').each((index, element) => {
+					if (display){
+						const node = $(element)
+						const text = node.text().trim()
+						if(text.indexOf('Índice') === -1 || text.indexOf('Index') === -1){
+							if (text.length >= 100){
+								summaries.push(text)
+							}
+						}else{
+							display = false;
+						}
+					}
+				})
+				metadata.DEFINITION = summaries.join('\n')
+            }
+            resolve(metadata);
+        })
+	})
+}
+
+var searchGoogle = function(in_search, in_language){
+	return new Promise(function(resolve, reject) {
+		googleIt({ query: in_language+'.wikipedia '+in_search, limit: 3, 'only-urls': true, 'no-display': true })
+		.then(results => {
+			let url_ = results.find(obj => obj.link.indexOf(urlWiki.replace('{{language}}', in_language)) !== -1);
+			if (url_ != undefined){				
+				searchWikipedia(url_.link, in_language)
+				.then(data => {
+					if (data.DEFINITION !== ''){
+						resolve(data);
+					}else {
+						reject('Definition not found');
+					}
+				})
+				.catch(err => {
+					reject('error');
+				})
+			}else {
+				reject('Definition not found');
+			}
+		})
+		.catch(e => {
+			reject('error');
+		});
+	})
+}
+
+const defaultConfig = {
+    idChat: '',
+    search: '',
+    language: 'en',
+    messageError: '*Ooops, an error occurred while trying to search, try again later*',
+    messageNoDataFound: '*No information about your search could be found*'
+}
+/**
+ * Plugin that allows the search of different things in wikipedia
+ * @function wiki
+ * @memberof Plugins
+ * @param {string} idChat - Chat id to send the new image to
+ * @param {string} search - Search parameter to perform
+ * @param {string} language - Language in which to search
+ * @param {string} messageError - Message to send in case of error
+ * @param {string} messageNoDataFound - Message to send in case of not finding information
+ */
+module.exports = {
+	/**
+    * Id - Name of the plugin to use
+    * @property {string}  id - Name of the plugin to use
+    */
+    id: 'wiki',
+    plugin(_args) {
+        const args = this.mergeOpts(defaultConfig, _args);
+        if (args.idChat !== '' &amp;&amp; args.search !== '') {
+            args.language = args.language.toLowerCase();
+            searchGoogle(args.search.trim(), args.language)
+			.then(data => {
+                let msg = `*${ data.TITLE }* \n\n ${ data.DEFINITION }`
+                this.sendMessage({
+                    "idChat": args.idChat,
+                    "message": msg
+                });
+			})
+			.catch(err => {
+				if (err === 'Definition not found'){
+                    this.sendMessage({
+                        "idChat": args.idChat, 
+                        "message": args.messageNoDataFound
+                    });
+				}else {
+					this.sendMessage({
+                        "idChat": args.idChat, 
+                        "message": args.messageError
+                    });
+				}
+			});
+        }
+    }
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+<script src="scripts/search.js"> </script>
+
+</body>
+</html>

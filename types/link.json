@@ -6,6 +6,9 @@
         "idMessage": "",
         "replyMessage": false,
         "caption": "",
+        "title": "",
+        "description": "",
+        "thumb": "",
         "link": ""
     }
 }
