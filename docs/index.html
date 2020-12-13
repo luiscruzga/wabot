@@ -107,7 +107,7 @@
     
 
 
-    <h3>wabot 1.1.2</h3>
+    <h3>wabot 1.1.3</h3>
 
 
 
@@ -301,6 +301,10 @@
 <tr>
 <td>Zombie</td>
 <td>Plugin that allows you to transform your selfie into a zombie</td>
+</tr>
+<tr>
+<td>Translate</td>
+<td>Plugin that allows you to translate a text to the language that is requested</td>
 </tr>
 </tbody>
 </table>
@@ -534,6 +538,26 @@ const  commands = [
 				]
 			}
 		]
+	},
+	{
+		&quot;name&quot;:  &quot;getTranslation&quot;,
+		&quot;contains&quot;: [],
+		&quot;exact&quot;: [&quot;@translate&quot;, &quot;translate&quot;, &quot;@traduccion&quot;, &quot;traduccion&quot;, &quot;traducción&quot;],
+		&quot;params&quot;: [
+			{
+				&quot;name&quot;:  &quot;text&quot;,
+				&quot;required&quot;: false,
+				&quot;isNumber&quot;:  false,
+				&quot;request&quot;: [
+					&quot;*Indicame que quieres traducir:*&quot;,
+					&quot;*¿Qué deseas traducir?:*&quot;
+				],
+				&quot;values&quot;:  &quot;any&quot;,
+				&quot;badResponse&quot;: [
+					&quot;Por favor ingresa un valor válido.&quot;
+				]
+			}
+		]
 	}
 ];
 
@@ -551,7 +575,7 @@ const  wabot = new  WABOT({
 		removeBgApis: [ &quot;pUXZvFuC7ZE4y3FcroP56fdf&quot; ],
 		plugins: {
 			folder: &quot;../plugins&quot;,
-			plugins: ['makeZombie', 'wiki', 'coronavirus', 'youtube', 'cartoon', 'music', 'anime', 'news'],
+			plugins: ['makeZombie', 'wiki', 'coronavirus', 'youtube', 'cartoon', 'music', 'anime', 'news', 'translate'],
 			setup: {
 				&quot;news&quot;: { 
 					&quot;timeRefresh&quot;: 10,
@@ -748,6 +772,14 @@ wabot.on('getNews', (res) => {
     wabot.news({
 		&quot;idChat&quot;: res.data.from,
         &quot;search&quot;: res.params.search || ''
+    });
+});
+
+wabot.on('getTranslation', (res) => {
+    wabot.translate({
+		&quot;idChat&quot;: res.data.from,
+		&quot;text&quot;: res.params.text,
+		&quot;to&quot;: 'en'
     });
 });
 

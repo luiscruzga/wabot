@@ -227,6 +227,26 @@ const  commands = [
 				]
 			}
 		]
+	},
+	{
+		"name":  "getTranslation",
+		"contains": [],
+		"exact": ["@translate", "translate", "@traduccion", "traduccion", "traducción"],
+		"params": [
+			{
+				"name":  "text",
+				"required": false,
+				"isNumber":  false,
+				"request": [
+					"*Indicame que quieres traducir:*",
+					"*¿Qué deseas traducir?:*"
+				],
+				"values":  "any",
+				"badResponse": [
+					"Por favor ingresa un valor válido."
+				]
+			}
+		]
 	}
 ];
 
@@ -237,13 +257,13 @@ const wabot = new WABOT({
         bann: {
             active: false,
         },
-        whiteList: ["56954372453@c.us", "56961343535@c.us"],
+        whiteList: ["56954372453@c.us", "5696123445@c.us"],
         executions: {
             simulateTyping: true,
 		},
 		plugins: {
 			folder: "../plugins",
-			plugins: ['makeZombie', 'wiki', 'coronavirus', 'youtube', 'cartoon', 'music', 'anime', 'news'],
+			plugins: ['makeZombie', 'wiki', 'coronavirus', 'youtube', 'cartoon', 'music', 'anime', 'news', 'translate'],
 			setup: {
 				"news": { 
 					"timeRefresh": 10,
@@ -440,6 +460,14 @@ wabot.on('getNews', (res) => {
     wabot.news({
 		"idChat": res.data.from,
         "search": res.params.search || ''
+    });
+});
+
+wabot.on('getTranslation', (res) => {
+    wabot.translate({
+		"idChat": res.data.from,
+		"text": res.params.text,
+		"to": 'en'
     });
 });
 

@@ -68,6 +68,7 @@ Below is a list of the plugins that come by default incorporated with the module
 | Coronavirus | Plugin to obtain information on the coronavirus by countries, cases, deaths, etc |
 | Music | Plugin to get a song in mp3 format directly from soundcloud |
 | News | Plugin to get news from the different rss sources that are configured |
+| Translate | Plugin that allows you to translate a text to the language that is requested |
 | Wiki | Plugin that allows the search of different things in wikipedia |
 | Youtube | Plugin that allows you to search for videos directly from YouTube |
 | Zombie | Plugin that allows you to transform your selfie into a zombie |
@@ -305,6 +306,26 @@ const  commands = [
 				]
 			}
 		]
+	},
+	{
+		"name":  "getTranslation",
+		"contains": [],
+		"exact": ["@translate", "translate", "@traduccion", "traduccion", "traducción"],
+		"params": [
+			{
+				"name":  "text",
+				"required": false,
+				"isNumber":  false,
+				"request": [
+					"*Indicame que quieres traducir:*",
+					"*¿Qué deseas traducir?:*"
+				],
+				"values":  "any",
+				"badResponse": [
+					"Por favor ingresa un valor válido."
+				]
+			}
+		]
 	}
 ];
 
@@ -322,7 +343,7 @@ const  wabot = new  WABOT({
 		removeBgApis: [ "pUXZvFuC7ZE4y3FcroP56fdf" ],
 		plugins: {
 			folder: "../plugins",
-			plugins: ['makeZombie', 'wiki', 'coronavirus', 'youtube', 'cartoon', 'music', 'anime', 'news'],
+			plugins: ['makeZombie', 'wiki', 'coronavirus', 'youtube', 'cartoon', 'music', 'anime', 'news', 'translate'],
 			setup: {
 				"news": { 
 					"timeRefresh": 10,
@@ -519,6 +540,14 @@ wabot.on('getNews', (res) => {
     wabot.news({
 		"idChat": res.data.from,
         "search": res.params.search || ''
+    });
+});
+
+wabot.on('getTranslation', (res) => {
+    wabot.translate({
+		"idChat": res.data.from,
+		"text": res.params.text,
+		"to": 'en'
     });
 });
 
