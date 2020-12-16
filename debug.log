@@ -25,3 +25,59 @@
 [1211/122117.812:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
 [1211/125205.222:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
 [1211/131727.952:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1214/193120.073:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1214/222047.083:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1214/224039.839:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1214/225434.751:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1214/232624.827:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1215/000921.557:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1215/002700.554:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1215/011433.810:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\luis.cruz.garcia\Desktop\PROYECTOS_PROPIOS\WABOT\ChromeSession\Crashpad\attachments\51e3e3c7-5c5c-4beb-b077-d4dfffd63a0b: The system cannot find the path specified. (0x3)
+[1215/104428.384:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\luis.cruz.garcia\Desktop\PROYECTOS_PROPIOS\WABOT\ChromeSession\Crashpad\attachments\a6d27e3c-00e2-43e7-b758-240e2a81af3b: The system cannot find the path specified. (0x3)
+[1215/104428.407:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name osarch, discarding value x86_64
+[1215/104428.407:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name pid, discarding value 11384
+[1215/104428.407:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name ptype, discarding value utility
+[1215/120853.099:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\luis.cruz.garcia\Desktop\PROYECTOS_PROPIOS\WABOT\ChromeSession\Crashpad\attachments\f92ac475-0607-4d31-9181-601e5fa0ffdc: The system cannot find the path specified. (0x3)
+[1215/120853.121:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name osarch, discarding value x86_64
+[1215/120853.121:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name pid, discarding value 18560
+[1215/120853.121:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name ptype, discarding value utility
+[1215/131847.349:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[1215/131847.356:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[1215/131847.357:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[1215/131847.849:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\luis.cruz.garcia\Desktop\PROYECTOS_PROPIOS\WABOT\ChromeSession\Crashpad\attachments\706ee8bb-4be2-49fb-a46e-8b086d09bdaa: The system cannot find the path specified. (0x3)
+[1215/131847.868:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name osarch, discarding value x86_64
+[1215/131847.868:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name pid, discarding value 15464
+[1215/131847.868:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name ptype, discarding value utility
+[1215/155003.617:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1215/160706.709:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\luis.cruz.garcia\Desktop\PROYECTOS_PROPIOS\WABOT\ChromeSession\Crashpad\attachments\9f2d9de4-591b-4375-9507-3a16bff4d339: The system cannot find the path specified. (0x3)
+[1215/160706.731:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name osarch, discarding value x86_64
+[1215/160706.731:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name pid, discarding value 19044
+[1215/160706.731:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name ptype, discarding value utility
+[1215/163538.591:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[1215/163707.714:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[1215/175556.201:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\luis.cruz.garcia\Desktop\PROYECTOS_PROPIOS\WABOT\ChromeSession\Crashpad\attachments\845e5503-2fb0-4de4-a2fa-39add9147003: The system cannot find the path specified. (0x3)
+[1215/175556.227:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name osarch, discarding value x86_64
+[1215/175556.227:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name pid, discarding value 19704
+[1215/175556.227:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name ptype, discarding value utility
+[1215/180604.739:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1215/185727.696:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1215/185740.442:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\luis.cruz.garcia\Desktop\PROYECTOS_PROPIOS\WABOT\ChromeSession\Crashpad\attachments\16cb61fd-b727-45e2-b1f4-13b7ac63e8bf: The system cannot find the path specified. (0x3)
+[1215/185740.468:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name osarch, discarding value x86_64
+[1215/185740.468:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name pid, discarding value 22252
+[1215/185740.468:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name ptype, discarding value utility
+[1215/190919.888:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1215/192641.231:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1215/195046.441:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1215/202608.253:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\luis.cruz.garcia\Desktop\PROYECTOS_PROPIOS\WABOT\ChromeSession\Crashpad\attachments\f1cca0cc-4ce6-49f3-99d6-3af576006207: The system cannot find the path specified. (0x3)
+[1215/202608.265:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name osarch, discarding value x86_64
+[1215/202608.265:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name pid, discarding value 23260
+[1215/202608.265:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name ptype, discarding value utility
+[1215/203914.389:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1215/205322.735:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[1215/205322.738:ERROR:exception_snapshot_win.cc(99)] thread ID 16304 not found in process
+[1215/205322.739:ERROR:scoped_process_suspend.cc(40)] NtResumeProcess: An attempt was made to access an exiting process. (0xc000010a)
+[1215/221842.231:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1216/004030.958:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\luis.cruz.garcia\Desktop\PROYECTOS_PROPIOS\WABOT\ChromeSession\Crashpad\attachments\e45b44ca-64d0-4a1f-babf-4211af11be02: The system cannot find the path specified. (0x3)
+[1216/004030.973:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name osarch, discarding value x86_64
+[1216/004030.973:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name pid, discarding value 19348
+[1216/004030.973:WARNING:minidump_to_upload_parameters.cc(67)] duplicate annotation name ptype, discarding value utility

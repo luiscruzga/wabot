@@ -153,6 +153,8 @@ const replaceAll = (str, term, replacement) => {
  * @param {boolean} opts.puppeteerConfig.dowloadChromeVersion - Download chromium browser or use local google chome
  * @param {number} opts.puppeteerConfig.chromeVersion - Version of chromium to download
  * @param {string} opts.puppeteerConfig.localChromePath - Google chrome executable path
+ * @param {string} opts.puppeteerConfig.getInitScreenshot - Allows you to take a screenshot when you start WhatsApp in order to detect problems when running in headless mode
+ * @param {string} opts.puppeteerConfig.localChromePath - File name to save the screenshot
  * @param {string} opts.puppeteerConfig.args - Args to open the web browser
  * @param {object} opts.intentConfig - Execution and internal options
  * @param {boolean} opts.intentConfig.showContent - Display chats in browser
@@ -217,7 +219,7 @@ const replaceAll = (str, term, replacement) => {
  * @fires WABOT#command
  */
 class WABOT extends EventEmitter {
-    constructor(opts){
+    constructor(opts = {}){
         super();
         // Messages callbacks history
         this.callbacks = [];
@@ -632,10 +634,11 @@ class WABOT extends EventEmitter {
                     let pluginsFiles = [];
                     files.forEach(file => {
                         if (file.indexOf('.js') !== -1){
-                            const {id, setup, plugin} = require(path.join(pathPlugins, file));
+                            const {id, setup, plugin, init} = require(path.join(pathPlugins, file));
                             const metadata = {
                                 id: id,
                                 setup: setup,
+                                init: init,
                                 plugin: plugin
                             };
                             pluginsFiles.push(metadata);
@@ -648,6 +651,9 @@ class WABOT extends EventEmitter {
                             Object.assign(this, {
                                 [pluginFile.id]: pluginFile.plugin
                             });
+                            if (typeof pluginFile.init !== 'undefined') {
+                                pluginFile.init();
+                            }
                             if (typeof plugins.setup[plugin] !== 'undefined') {
                                 pluginFile.setup(plugins.setup[plugin]);
                             }

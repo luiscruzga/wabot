@@ -150,7 +150,7 @@ window.responseServer = async (response) => {
             }
             break;
         case 'location':
-            if (response.replyMessage && response.isAlbum){
+            if (response.replyMessage){
                 WAPI.sendLocation(response.idChat, response.lat, response.lng, response.title, response.idMessage);
             }else {
                 WAPI.sendLocation(response.idChat, response.lat, response.lng, response.title);

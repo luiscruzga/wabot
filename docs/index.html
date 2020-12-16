@@ -107,7 +107,7 @@
     
 
 
-    <h3>wabot 1.1.4</h3>
+    <h3> </h3>
 
 
 
@@ -125,6 +125,7 @@
 
     <section>
         <article><h1>WABOT!</h1>
+<p><img src="./WABOT.png" alt="WABOT"></p>
 <p>Wabot is a nodejs module which allows you to connect with whatsapp web by using Puppeteer.</p>
 <p>It is not an official whatsapp module so I am not responsible for any ban. Although I have tried a lot and have not been banned, I cannot guarantee that this is the case for everyone or that in the future restrictions will apply to prevent its use.</p>
 <h1>Installation</h1>
@@ -260,9 +261,9 @@
 <p>The creation of new plugins is allowed to automate some tasks and achieve incorporation as a new method of the wabot class.</p>
 <p>To create a new plugin it is required to export an object with the following properties:</p>
 <ul>
-<li>Id: Plugin identifier (name)</li>
-<li>setup: Initial configuration function with configuration parameters (optional function)</li>
-<li>plugin: Function that contains the actions to be performed by the plugin, this function will have access to all the methods of the wabot function by using &quot;this&quot;</li>
+<li><strong>Id</strong>: Plugin identifier (name)</li>
+<li><strong>setup</strong>: Initial configuration function with configuration parameters (optional function)</li>
+<li><strong>plugin</strong>: Function that contains the actions to be performed by the plugin, this function will have access to all the methods of the wabot function by using &quot;this&quot;</li>
 </ul>
 <p>Once the plugin is created, the &quot;plugins&quot; parameter must be configured at the time of instantiating WABOT through intentsConfig, then the possible modules to be used by the plugin must be installed separately through the console by &quot;npm install module_name&quot;.</p>
 <p>Below is a list of the plugins that come by default incorporated with the module:</p>
@@ -317,304 +318,10 @@
 </tbody>
 </table>
 <h2>Example usage</h2>
-<pre class="prettyprint source lang-js"><code>const  WABOT = require('wabot');
-const  path = require('path');
-const  commands = [
-	{
-		&quot;name&quot;:  &quot;diffSiebel&quot;,
-		&quot;contains&quot;: [],
-		&quot;exact&quot;: [&quot;@diff_siebel&quot;, &quot;diferencias siebel&quot;, &quot;difierencias con siebel&quot;, &quot;diferencias migracion siebel&quot;, &quot;diff siebel&quot;],
-		&quot;params&quot;: [
-			{
-				&quot;name&quot;:  &quot;idOnda&quot;,
-				&quot;isNumber&quot;:  true,
-				&quot;request&quot;: [
-					&quot;*Indicame el id de onda a consultar:*&quot;,
-					&quot;*Dame el id de onda a revisar:*&quot;
-				],
-				&quot;values&quot;:  &quot;any&quot;,
-				&quot;badResponse&quot;: [
-					&quot;Por favor ingrese un valor válido.&quot;,
-					&quot;Id Onda incorrecto, favor ingresa un valor válido.&quot;
-				]
-			},
-			{
-				&quot;name&quot;:  &quot;ambienteMig&quot;,
-				&quot;request&quot;: [
-					&quot;Indicame el ambiente de migración al cual deseas consultar:&quot;,
-					&quot;Seleccione el ambiente de migración a consultar:&quot;
-				],
-				&quot;values&quot;: [&quot;DESA&quot;, &quot;TEST&quot;, &quot;PROD&quot;],
-				&quot;badResponse&quot;: [
-					&quot;El ambiente indicado no es correcto, por favor indica un ambiente válido.&quot;
-				]
-			},
-			{
-				&quot;name&quot;:  &quot;ambienteSiebel&quot;,
-				&quot;request&quot;: [
-					&quot;Indicame el ambiente de Siebel al cual deseas consultar:&quot;,
-					&quot;Seleccione el ambiente de Siebel a consultar:&quot;
-				],
-				&quot;values&quot;: [&quot;QA&quot;, &quot;MIGRACION&quot;, &quot;INTEGRADO&quot;, &quot;PROD&quot;, &quot;CLOUD&quot;, &quot;PREPROD&quot;],
-				&quot;badResponse&quot;: [
-					&quot;El ambiente indicado no es correcto, por favor indica un ambiente válido.&quot;
-				]
-			}
-		]
-	},
-	{
-		&quot;name&quot;:  &quot;status_onda&quot;,
-		&quot;contains&quot;: [],
-		&quot;exact&quot;: [&quot;@status_onda&quot;, &quot;status_onda&quot;, &quot;/status_onda&quot;, &quot;estatus onda&quot;, &quot;status onda&quot;],
-		&quot;params&quot;: [
-			{
-				&quot;name&quot;:  &quot;ambiente&quot;,
-				&quot;request&quot;: [
-				&quot;*Indicame el ambiente al cual deseas consultar:*&quot;,
-				&quot;*Seleccione el ambiente a consultar:*&quot;
-				],
-				&quot;values&quot;: [&quot;DESA&quot;, &quot;TEST&quot;, &quot;PROD&quot;],
-				&quot;badResponse&quot;: [
-				&quot;*El ambiente indicado no es correcto, por favor indica un ambiente válido.*&quot;
-				]
-			},
-			{
-				&quot;name&quot;:  &quot;idOnda&quot;,
-				&quot;isNumber&quot;:  true,
-				&quot;request&quot;: [
-					&quot;*Indicame el id de onda a consultar:*&quot;,
-					&quot;*Dame el id de onda a revisar:*&quot;
-				],
-				&quot;values&quot;:  &quot;any&quot;,
-				&quot;badResponse&quot;: [
-					&quot;Por favor ingrese un valor válido.&quot;,
-					&quot;Id Onda incorrecto, favor ingresa un valor válido.&quot;
-				]
-			}
-		]
-	},
-	{
-		&quot;name&quot;:  &quot;help&quot;,
-		&quot;contains&quot;: [],
-		&quot;exact&quot;: [&quot;@help&quot;, &quot;@ayuda&quot;, &quot;ayuda&quot;, &quot;help&quot;, &quot;@comandos&quot;, &quot;comandos&quot;]
-	},
-	{
-		&quot;name&quot;:  &quot;chiste&quot;,
-		&quot;contains&quot;: [],
-		&quot;exact&quot;: [&quot;@chiste&quot;, &quot;@chistes&quot;, &quot;chiste&quot;, &quot;chistes&quot;]
-	},
-	{
-		&quot;name&quot;:  &quot;getImage&quot;,
-		&quot;contains&quot;: [],
-		&quot;exact&quot;: [&quot;@image&quot;, &quot;@images&quot;, &quot;image&quot;, &quot;images&quot;]
-	},
-	{
-		&quot;name&quot;:  &quot;news&quot;,
-		&quot;contains&quot;: [],
-		&quot;exact&quot;: [&quot;@noticias&quot;, &quot;@noticia&quot;, &quot;noticia&quot;, &quot;noticias&quot;]
-	},
-	{
-		&quot;name&quot;:  &quot;sticker&quot;,
-		&quot;contains&quot;: [],
-		&quot;exact&quot;: [&quot;@makesticker&quot;, &quot;@sticker&quot;, &quot;sticker&quot;, &quot;makesticker&quot;]
-	},
-	{
-		&quot;name&quot;:  &quot;location&quot;,
-		&quot;contains&quot;: [],
-		&quot;exact&quot;: [&quot;@lugar&quot;, &quot;@location&quot;, &quot;lugar&quot;, &quot;location&quot;]
-	},
-	{
-		&quot;name&quot;:  &quot;contacto&quot;,
-		&quot;contains&quot;: [],
-		&quot;exact&quot;: [&quot;contacto&quot;, &quot;@contacto&quot;]
-	},
-	{
-		&quot;name&quot;:  &quot;makeZombie&quot;,
-		&quot;contains&quot;: [],
-		&quot;exact&quot;: [&quot;@makezombie&quot;, &quot;@zombie&quot;, &quot;zombie&quot;, &quot;makezombie&quot;]
-	},
-	{
-		&quot;name&quot;:  &quot;getWiki&quot;,
-		&quot;contains&quot;: [],
-		&quot;exact&quot;: [&quot;@wiki&quot;, &quot;wiki&quot;, &quot;wikipedia&quot;, &quot;@wikipedia&quot;],
-		&quot;params&quot;: [
-			{
-				&quot;name&quot;:  &quot;search&quot;,
-				&quot;isNumber&quot;:  false,
-				&quot;request&quot;: [
-					&quot;*Indicame que quieres buscar:*&quot;,
-					&quot;*¿Qué deseas buscar?:*&quot;
-				],
-				&quot;values&quot;:  &quot;any&quot;,
-				&quot;badResponse&quot;: [
-					&quot;Por favor ingresa un valor válido.&quot;,
-					&quot;Tu busqueda es incorrecta, ingresa un valor válido.&quot;
-				]
-			}
-		]
-	},
-	{
-		&quot;name&quot;:  &quot;getCoronavirus&quot;,
-		&quot;contains&quot;: [],
-		&quot;exact&quot;: [&quot;@coronavirus&quot;, &quot;coronavirus&quot;, &quot;covid&quot;, &quot;covid&quot;, &quot;@virus&quot;, &quot;virus&quot;],
-		&quot;params&quot;: [
-			{
-				&quot;name&quot;:  &quot;search&quot;,
-				&quot;required&quot;: false,
-				&quot;isNumber&quot;:  false,
-				&quot;request&quot;: [
-					&quot;*Indicame que quieres buscar:*&quot;,
-					&quot;*¿Qué deseas buscar?:*&quot;
-				],
-				&quot;values&quot;:  &quot;any&quot;,
-				&quot;badResponse&quot;: [
-					&quot;Por favor ingresa un valor válido.&quot;,
-					&quot;Tu busqueda es incorrecta, ingresa un valor válido.&quot;
-				]
-			}
-		]
-	},
-	{
-		&quot;name&quot;:  &quot;getYoutube&quot;,
-		&quot;contains&quot;: [],
-		&quot;exact&quot;: [&quot;@youtube&quot;, &quot;youtube&quot;],
-		&quot;params&quot;: [
-			{
-				&quot;name&quot;:  &quot;search&quot;,
-				&quot;required&quot;: true,
-				&quot;isNumber&quot;:  false,
-				&quot;request&quot;: [
-					&quot;*Indicame que quieres buscar:*&quot;,
-					&quot;*¿Qué deseas buscar?:*&quot;
-				],
-				&quot;values&quot;:  &quot;any&quot;,
-				&quot;badResponse&quot;: [
-					&quot;Por favor ingresa un valor válido.&quot;,
-					&quot;Tu busqueda es incorrecta, ingresa un valor válido.&quot;
-				]
-			}
-		]
-	},
-	{
-		&quot;name&quot;:  &quot;getCartoon&quot;,
-		&quot;contains&quot;: [],
-		&quot;exact&quot;: [&quot;@cartoon&quot;, &quot;cartoon&quot;]
-	},
-	{
-		&quot;name&quot;:  &quot;getMusic&quot;,
-		&quot;contains&quot;: [],
-		&quot;exact&quot;: [&quot;@music&quot;, &quot;music&quot;, &quot;@musica&quot;, &quot;musica&quot;, &quot;música&quot;, &quot;@song&quot;, &quot;song&quot;],
-		&quot;params&quot;: [
-			{
-				&quot;name&quot;:  &quot;search&quot;,
-				&quot;required&quot;: true,
-				&quot;isNumber&quot;:  false,
-				&quot;request&quot;: [
-					&quot;*Indicame que canción quieres buscar:*&quot;,
-					&quot;*¿Qué canción deseas buscar?:*&quot;
-				],
-				&quot;values&quot;:  &quot;any&quot;,
-				&quot;badResponse&quot;: [
-					&quot;Por favor ingresa un valor válido.&quot;,
-					&quot;Tu búsqueda es incorrecta, ingresa un valor válido.&quot;
-				]
-			}
-		]
-	},
-	{
-		&quot;name&quot;:  &quot;getAnime&quot;,
-		&quot;contains&quot;: [],
-		&quot;exact&quot;: [&quot;@anime&quot;, &quot;anime&quot;]
-	},
-	{
-		&quot;name&quot;:  &quot;getNews&quot;,
-		&quot;contains&quot;: [],
-		&quot;exact&quot;: [&quot;@news&quot;, &quot;news&quot;, &quot;@noticias&quot;, &quot;noticias&quot;, &quot;@noticia&quot;, &quot;noticia&quot;],
-		&quot;params&quot;: [
-			{
-				&quot;name&quot;:  &quot;search&quot;,
-				&quot;required&quot;: false,
-				&quot;isNumber&quot;:  false,
-				&quot;request&quot;: [
-					&quot;*Indicame que quieres buscar:*&quot;,
-					&quot;*¿Qué deseas buscar?:*&quot;
-				],
-				&quot;values&quot;:  &quot;any&quot;,
-				&quot;badResponse&quot;: [
-					&quot;Por favor ingresa un valor válido.&quot;,
-					&quot;Tu busqueda es incorrecta, ingresa un valor válido.&quot;
-				]
-			}
-		]
-	},
-	{
-		&quot;name&quot;:  &quot;getTranslation&quot;,
-		&quot;contains&quot;: [],
-		&quot;exact&quot;: [&quot;@translate&quot;, &quot;translate&quot;, &quot;@traduccion&quot;, &quot;traduccion&quot;, &quot;traducción&quot;],
-		&quot;params&quot;: [
-			{
-				&quot;name&quot;:  &quot;text&quot;,
-				&quot;required&quot;: false,
-				&quot;isNumber&quot;:  false,
-				&quot;request&quot;: [
-					&quot;*Indicame que quieres traducir:*&quot;,
-					&quot;*¿Qué deseas traducir?:*&quot;
-				],
-				&quot;values&quot;:  &quot;any&quot;,
-				&quot;badResponse&quot;: [
-					&quot;Por favor ingresa un valor válido.&quot;
-				]
-			}
-		]
-	},
-	{
-		&quot;name&quot;:  &quot;getMeme&quot;,
-		&quot;contains&quot;: [],
-		&quot;exact&quot;: [&quot;@meme&quot;, &quot;@memes&quot;, &quot;meme&quot;, &quot;memes&quot;]
-	}
-];
+<p>You can find more examples in the following <a href="https://github.com/luiscruzga/wabot/tree/master/example">link</a></p>
+<pre class="prettyprint source lang-js"><code>const WABOT = require('wabot');
 
-const  wabot = new  WABOT({
-	puppeteerConfig: {viewBrowser:  true, opendevtools:  true},
-	intentsConfig: {
-		debug: true,
-		bann: {
-			active:  false,
-		},
-		whiteList: [&quot;56954372453@c.us&quot;, &quot;56961464765@c.us&quot;],
-		executions: {
-			simulateTyping:  true,
-		},
-		removeBgApis: [ &quot;pUXZvFuC7ZE4y3FcroP56fdf&quot; ],
-		plugins: {
-			folder: &quot;../plugins&quot;,
-			plugins: ['makeZombie', 'wiki', 'coronavirus', 'youtube', 'cartoon', 'music', 'anime', 'news', 'translate', 'meme'],
-			setup: {
-				&quot;news&quot;: { 
-					&quot;timeRefresh&quot;: 10,
-					&quot;feeds&quot;: [
-						&quot;http://feeds.feedburner.com/soychilecl-todas&quot;,
-						&quot;https://feeds.feedburner.com/fayerwayer&quot;,
-						&quot;http://www.bbc.co.uk/mundo/ultimas_noticias/index.xml&quot;,
-						&quot;https://news.google.com/news/rss/?ned=es_cl&gl=CL&hl=es-419&quot;
-					]
-				},
-				&quot;cartoon&quot;: {
-					&quot;apiKey&quot;: &quot;7dc8f27d-1aae-4b13-92e3-76d1abde2529&quot;
-				},
-				&quot;anime&quot;: {
-					&quot;appKey&quot;: &quot;118a0c9f6df048fe86bd415c8d1cdcb8&quot;,
-					&quot;token&quot;: &quot;34a575f44c23a915969317ffac1ef60f&quot;,
-					&quot;timestamp&quot;: &quot;1607695579320&quot;
-				},
-				&quot;music&quot;: {
-					&quot;clientId&quot;: &quot;ymSs5c4hxrRu3yuA6ZyOORoADJI2tVPD&quot;
-				}
-			}
-		},
-		commands:  commands
-	}
-});
+const wabot = new WABOT();
 
 // Default when no assignment is found for the message
 wabot.on('message', (res) => {
@@ -638,179 +345,14 @@ wabot.on('message', (res) => {
         });
     }
 });
-  
-wabot.on('vcard', (res) => {
-	wabot.sendMessage({
-	&quot;idChat&quot;:  res.data.from,
-	&quot;message&quot;:  &quot;This is a response to vcard&quot;
-	});
-});
-
-wabot.on('help', (res) => {
-	wabot.sendMessage({
-	&quot;idChat&quot;:  res.data.from,
-	&quot;message&quot;:  &quot;*This is a help.*&quot;
-	});
-});
-
-wabot.on('chiste', (res) => {
-	wabot.sendMessage({
-	&quot;idChat&quot;:  res.data.from,
-	&quot;message&quot;:  &quot;This is a joke&quot;
-	});
-});
-
-wabot.on('getImage', (res) => {
-	wabot.sendImage({
-	&quot;idChat&quot;:  res.data.from,
-	&quot;caption&quot;:  &quot;This is a image.&quot;,
-	&quot;file&quot;:  path.join(__dirname, &quot;meme.jpg&quot;)
-	});
-});
-
-wabot.on('news', (res) => {
-	wabot.sendLink({
-	&quot;idChat&quot;:  res.data.from,
-	&quot;caption&quot;:  &quot;This is a description&quot;,
-	&quot;link&quot;: &quot;http://feedproxy.google.com/~r/fayerwayer/~3/w3C_M7uD-No/ios-14-punto-verde-o-naranja-en-iphone&quot;
-	});
-});
-
-wabot.on('sticker', (res) => {
-	wabot.sendSticker({
-	&quot;idChat&quot;:  res.data.from,
-	&quot;file&quot;:  res.media
-	});
-});
-
-wabot.on('location', (res) => {
-	wabot.sendLocation({
-	&quot;idChat&quot;:  res.data.from,
-	&quot;lat&quot;:  &quot;-33.0467291&quot;,
-	&quot;lng&quot;:  &quot;-71.6169808&quot;,
-	&quot;title&quot;:  &quot;Freire 470, Hogar&quot;
-	});
-});
-
-wabot.on('contacto', (res) => {
-	wabot.sendVcard({
-		&quot;idChat&quot;:  res.data.from,
-		&quot;contactName&quot;:  &quot;Luis Cruz&quot;,
-		&quot;vcard&quot;: {
-			firstName:  &quot;Luis&quot;,
-			lastName:  &quot;Cruz&quot;,
-			birthday:  &quot;29-02-1990&quot;,
-			url:  &quot;https://github.com/luiscruzga&quot;,
-			nickname:  &quot;Luis Cruz&quot;,
-			cellPhone:  &quot;+56961467583&quot;,
-			email:  &quot;luis.xxxxxxx@gmail.com&quot;,
-			photo:  path.join(__dirname, &quot;test.jpg&quot;)
-		}
-	});
-});
-  
-wabot.on('onAddedToGroup', (res) => {
-	console.log('Added to a group', res);
-});
-  
-wabot.on('onRemovedFromGroup', (res) => {
-	console.log('Removed from a group', res);
-});
-
-wabot.on('diffSiebel', (res) => {
-	wabot.sendMessage({
-	&quot;idChat&quot;:  res.data.from,
-	&quot;message&quot;:  `You entered the parameters: AmbienteMig: ${res.params.ambienteMig}, idOnda: ${res.params.idOnda}, ambienteSiebel: ${res.params.ambienteSiebel}`
-	});
-});
-
-wabot.on('status_onda', (res) => {
-	wabot.sendMessage({
-	&quot;idChat&quot;:  res.data.from,
-	&quot;message&quot;:  `You entered the parameters: Ambiente: ${res.params.ambiente}, idOnda: ${res.params.idOnda}`
-	});
-});
-
-wabot.on('makeZombie', (res) => {
-    wabot.makeZombie({
-        &quot;idChat&quot;: res.data.from,
-        &quot;photo&quot;: res.media
-    });
-});
-
-wabot.on('getWiki', (res) => {
-    wabot.wiki({
-		&quot;idChat&quot;: res.data.from,
-		&quot;language&quot;: &quot;es&quot;,
-        &quot;search&quot;: res.params.search
-    });
-});
-
-wabot.on('getCoronavirus', (res) => {
-    wabot.coronavirus({
-		&quot;idChat&quot;: res.data.from,
-		&quot;headers&quot;: [&quot;Pais&quot;, &quot;Casos&quot;, &quot;Hoy&quot;, &quot;Muertes&quot;, &quot;Recuperados&quot;, &quot;Activos&quot;],
-        &quot;search&quot;: res.params.search || ''
-    });
-});
-
-wabot.on('getYoutube', (res) => {
-    wabot.youtube({
-		&quot;idChat&quot;: res.data.from,
-        &quot;search&quot;: res.params.search
-    });
-});
-
-wabot.on('getCartoon', (res) => {
-    wabot.cartoon({
-        &quot;idChat&quot;: res.data.from,
-		&quot;photo&quot;: res.media || ''
-    });
-});
-
-wabot.on('getMusic', (res) => {
-    wabot.music({
-		&quot;idChat&quot;: res.data.from,
-        &quot;search&quot;: res.params.search
-    });
-});
-
-wabot.on('getAnime', (res) => {
-    wabot.anime({
-        &quot;idChat&quot;: res.data.from,
-		&quot;photo&quot;: res.media || ''
-    });
-});
-
-wabot.on('getNews', (res) => {
-    wabot.news({
-		&quot;idChat&quot;: res.data.from,
-        &quot;search&quot;: res.params.search || ''
-    });
-});
-
-wabot.on('getTranslation', (res) => {
-    wabot.translate({
-		&quot;idChat&quot;: res.data.from,
-		&quot;text&quot;: res.params.text,
-		&quot;to&quot;: 'en'
-    });
-});
-
-wabot.on('getMeme', (res) => {
-    wabot.meme({
-		&quot;idChat&quot;: res.data.from,
-		&quot;language&quot;: &quot;es&quot;
-    });
-});
 
 wabot.on('ready', (session) => {
 	console.log('READY', session);
-	//console.log('Clossing Session');
-	//wabot.closeSession();
+    //console.log('Clossing Session');
+    //wabot.closeSession();
 });
 
-wabot.start();
+wabot.start(); 
 </code></pre>
 <h2>Default Options</h2>
 <p>Wabot accepts different startup options, then the default options.
@@ -823,8 +365,10 @@ wabot.start();
 	&quot;width&quot;: 1000,
 	&quot;heigth&quot;: 800,
 	&quot;dowloadChromeVersion&quot;: false,
-	&quot;chromeVersion&quot;: 737027,
+	&quot;chromeVersion&quot;: 818858,
 	&quot;localChromePath&quot;: &quot;C:/Program Files (x86)/Google/Chrome/Application/chrome.exe&quot;,
+	&quot;getInitScreenshot&quot;: false,
+    &quot;pathScreenshot&quot;: &quot;./screenshot.png&quot;,
 	&quot;args&quot;: [
 		&quot;--log-level=3&quot;,
 		&quot;--no-default-browser-check&quot;,
@@ -863,7 +407,7 @@ wabot.start();
     },
 	&quot;executions&quot;: {
 		&quot;reponseUsers&quot;: true,
-		&quot;simulateTyping&quot;: false,
+		&quot;simulateTyping&quot;: true,
 		&quot;timeSimulate&quot;: 3000,
 		&quot;contorlExecutions&quot;: false,
 		&quot;maxExecutions&quot;: 30,
@@ -874,7 +418,7 @@ wabot.start();
 		&quot;intervalSendSeen&quot;: 10
 	},
 	&quot;bann&quot;: {
-		&quot;active&quot;: true,
+		&quot;active&quot;: false,
 		&quot;timeInterval&quot;: 10,
 		&quot;maxBann&quot;: 3,
 		&quot;timeBann&quot;: 10,

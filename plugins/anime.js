@@ -1,8 +1,10 @@
+const puppeteer = require('puppeteer');
 const request = require('request');
 const fs = require('fs');
 const path = require('path');
 const ConvertBase64 = require('../lib/convertBase64');
 const convert64 = new ConvertBase64();
+var timeRefresh = 120;
 var config = {
     token: '',
     appKey: '',
@@ -10,6 +12,29 @@ var config = {
 }
 
 function randomUUI(a,b){for(b=a='';a++<36;b+=a*51&52?(a^15?8^Math.random()*(a^20?16:4):4).toString(16):'');return b}
+
+const getConfigInfo = async() => {
+    const browser = await puppeteer.launch({ headless: true });
+    const page = await browser.newPage();
+    await page.setRequestInterception(true);
+    page.on('request', async (request) => {
+      if (request.url() === 'https://ai.minivision.cn/apiagw/api/v1/cartoon/self_cartoon'){
+          const _headers = request.headers();
+          const _postData = request.postData();
+          config.token = _headers.token;
+          config.appKey = JSON.parse(_postData).appKey;
+          config.timestamp = JSON.parse(_postData).timestamp;
+      }
+      request.continue();
+    });
+  
+    await page.goto('https://ai.minivision.cn/#/coreability/cartoon', {
+      waitUntil: 'load',
+      timeout: 0
+    });
+  
+    await browser.close();
+}
 
 var getAnime = (in_url_image) => {
     return new Promise(function(resolve, reject) {
@@ -97,7 +122,7 @@ module.exports = {
     */
     id: 'anime',
     /**
-    * Initial setting function
+    * Initial setting function to pass the parameters manually (no longer necessary, there is a process that does it)
     * @memberof function:anime
     * @param {object} data - Initial information for the plugin
     * @param {string} data.token
@@ -111,6 +136,17 @@ module.exports = {
             config.appKey = data.appKey || '';
             config.timestamp = data.timestamp || '';
         }
+    },
+    /**
+    * Initial function triggered only if the user adds this plugin to the initial configuration
+    * @memberof function:anime
+    */
+    init() {
+        // REFRESH Config Info EVERY X MINUTES
+        getConfigInfo();
+        setInterval(() => {
+            getConfigInfo();
+        }, 60000 * timeRefresh);
     },
     plugin(_args) {
         const _this = this;

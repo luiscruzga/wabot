@@ -1,12 +1,38 @@
 // Modules to install separately
+const puppeteer = require('puppeteer');
 const request = require('request');
 const fs = require('fs');
 const path = require('path');
 
+var timeRefresh = 120;
 const musicPath = './files/';
 var clientId = '';
 
 function randomUUI(a,b){for(b=a='';a++<36;b+=a*51&52?(a^15?8^Math.random()*(a^20?16:4):4).toString(16):'');return b}
+
+const getConfigInfo = async () => {
+    const browser = await puppeteer.launch({ headless: true });
+    const page = await browser.newPage();
+  
+    await page.setRequestInterception(true);
+  
+    page.on('request', async (request) => {
+        if (request.url().indexOf('https://api-v2.soundcloud.com/search?') == 0){
+            const url = request.url();
+            const params = url.split('&');
+            const client_id = params.find(el => el.indexOf('client_id') == 0).replace('client_id=', '');
+            clientId = client_id || '';
+        }
+        request.continue();
+    });
+  
+    await page.goto('https://soundcloud.com/search?q=dance%20monkey', {
+        waitUntil: 'load',
+        timeout: 0
+    });
+  
+    await browser.close();
+}
 
 function escapeRegExp(string){
     return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -90,7 +116,7 @@ module.exports = {
     */
     id: 'music',
     /**
-    * Initial setting function
+    * Initial setting function to pass the parameters manually (no longer necessary, there is a process that does it)
     * @param {object} data - Initial information for the plugin
     * @param {string} data.clientId
     */
@@ -98,6 +124,16 @@ module.exports = {
         if (typeof data.clientId !== 'undefined') {
             clientId = data.clientId
         }
+    },
+    /**
+    * Initial function triggered only if the user adds this plugin to the initial configuration
+    */
+   init() {
+        // REFRESH Config Info EVERY X MINUTES
+        getConfigInfo();
+        setInterval(() => {
+            getConfigInfo();
+        }, 60000 * timeRefresh);
     },
     plugin(_args) {
         let _this = this;

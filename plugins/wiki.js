@@ -38,8 +38,9 @@ var searchWikipedia = function(in_url, in_language){
 				$('div#mw-content-text > .mw-parser-output').children('div,p').each((index, element) => {
 					if (display){
 						const node = $(element)
-						const text = node.text().trim()
-						if(text.indexOf('Índice') === -1 || text.indexOf('Index') === -1){
+						const nodeId = node.attr('id') || '';
+						if (  nodeId !== 'toc' ) {
+							const text = node.text().trim()
 							if (text.length >= 100){
 								summaries.push(text)
 							}

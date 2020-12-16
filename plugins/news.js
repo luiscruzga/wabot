@@ -43,9 +43,15 @@ const getNews = (search) => {
                         }else{
                             urlImage = thumbDefault;
                         }
+
                         base64.encode(urlImage, options, (err, data64) => {
                             if(err){
-                                reject(err);
+                                resolve({
+                                    "thumb": thumbDefault,
+                                    "urlNews": urlNews,
+                                    "title": title,
+                                    "description": description
+                                });
                             }else{
                                 resolve({
                                     "thumb": data64,
@@ -119,7 +125,7 @@ const getNews = (search) => {
 const defaultConfig = {
     idChat: '',
     search: '',
-    messageError: '*Ooops, an error occurred while trying to transform the image, try again later*'
+    messageError: '*Ooops, an error occurred while trying to get news, try again later*'
 }
 /**
  * Plugin to get news from the different rss sources that are configured

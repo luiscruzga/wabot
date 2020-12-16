@@ -9,7 +9,7 @@
     },
     "executions": {
         "reponseUsers": true,
-        "simulateTyping": false,
+        "simulateTyping": true,
         "timeSimulate": 3000,
         "contorlExecutions": false,
         "maxExecutions": 30,
@@ -20,7 +20,7 @@
         "intervalSendSeen": 10
     },
     "bann": {
-        "active": true,
+        "active": false,
         "timeInterval": 10,
         "maxBann": 3,
         "timeBann": 10,
