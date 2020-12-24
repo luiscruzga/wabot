@@ -1,0 +1,441 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wabot Documentation plugins/lifehacks.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">Wabot Documentation</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                 
+                    
+                        <a
+                            class="link user-link "
+                            href="https://github.com/luiscruzga/wabot"
+                        >
+                            Github
+                        </a>
+                    
+                        <a
+                            class="link user-link "
+                            href="https://github.com/luiscruzga/wabot/blob/master/example/test.js"
+                        >
+                            Example
+                        </a>
+                    
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+                <div class="search-wrapper">
+                    <input id="search" type="text" placeholder="Search docs..." class="input">
+                </div>
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Namespaces</h3><ul><li><a href="Plugins.html">Plugins</a></li></ul><h3>Classes</h3><ul><li><a href="WABOT.html">WABOT</a></li></ul><h3>Events</h3><ul><li><a href="WABOT.html#event:command">command</a></li><li><a href="WABOT.html#event:message">message</a></li><li><a href="WABOT.html#event:onAddedToGroup">onAddedToGroup</a></li><li><a href="WABOT.html#event:onBattery">onBattery</a></li><li><a href="WABOT.html#event:onMessageFromBloqued">onMessageFromBloqued</a></li><li><a href="WABOT.html#event:onMessageFromNoPrivileges">onMessageFromNoPrivileges</a></li><li><a href="WABOT.html#event:onMessageMediaUploadedEvent">onMessageMediaUploadedEvent</a></li><li><a href="WABOT.html#event:onParticipantsChanged">onParticipantsChanged</a></li><li><a href="WABOT.html#event:onPlugged">onPlugged</a></li><li><a href="WABOT.html#event:onRemovedFromGroup">onRemovedFromGroup</a></li><li><a href="WABOT.html#event:onStateChanged">onStateChanged</a></li><li><a href="WABOT.html#event:ready">ready</a></li><li><a href="WABOT.html#event:vcard">vcard</a></li><li><a href="WABOT.html#event:waitNewAcknowledgements">waitNewAcknowledgements</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>plugins/lifehacks.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// Modules to install separately
+const ConvertBase64 = require('../lib/convertBase64');
+const convert64 = new ConvertBase64();
+const base = "https://www.instagram.com/";
+const gqlUri = "https://www.instagram.com/graphql/query";
+const cheerio = require('cheerio');
+const rp = require('request-promise');
+const profiles = {
+    "en": "5.min.crafts",
+    "es": "ideas.en.5.minutos"
+}
+var profilePosts = {
+    "en": [],
+    "es": []
+}
+
+getLastPosts = async (username) => {
+    return new Promise(async (resolve, reject) => {
+        let profile = await getProfile(base + username);
+        if (profile !== false) {
+            let mediaLite = [];
+            let media = profile.graphql.user.edge_owner_to_timeline_media.edges;
+            for (let i = 0; i &lt; media.length; i++) {
+                mediaLite.push(media[i].node)
+            }
+            resolve(mediaLite);
+        } else {
+            reject("User not found!");
+        }
+    });
+}
+
+getProfile = async (url) => {
+    try {
+        let html = await rp(url);
+        let $ = cheerio.load(html);
+        let data;
+        for (let i = 0; i &lt; $('script').length; i++) {
+            if ($('script')[i].children.length > 0) {
+                if ($('script')[i].children[0].data.startsWith("window._sharedData =")) {
+                    data = $('script')[i].children[0].data;
+                }
+            }
+        }
+        if (data) {
+            data = data.replace("window._sharedData = ", "").slice(0, -1);
+            data = JSON.parse(data);
+            let profile = data.entry_data.ProfilePage[0]
+            return profile;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        return false;
+    }
+}
+
+getProfileByLogged = async params => {
+    try {
+        const profileleUri = `https://www.instagram.com/${params.username}/?__a=1`
+        let options = {
+            uri: profileleUri,
+            headers: {
+                'user_agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.3",
+                'cookie': params.cookie
+            },
+            json: true
+        };
+        let profile = await rp(options);
+        if (profile.graphql.user.is_private) {
+            throw new Error("Profile is private!")
+        } else {
+            return profile;
+        }
+
+    } catch (error) {
+        if (error.statusCode === 404) {
+            throw new Error("User not found!");
+        } else throw error;
+    }
+}
+
+getAllPosts = async params => {
+    try {
+
+        let profile = await getProfileByLogged(params);
+        let options = {
+            uri: gqlUri,
+            qs: {
+                query_hash: params.query_hash,
+                first: params.media_count,
+                id: profile.graphql.user.id
+            },
+            headers: {
+                'user_agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.3",
+                'cookie': params.cookie
+            },
+            json: true
+        };
+
+        let endCursor = profile.graphql.user.edge_owner_to_timeline_media.page_info.end_cursor;
+        let hasNextPage = profile.graphql.user.edge_owner_to_timeline_media.page_info.has_next_page;
+
+        if ((params.media_count &lt;= 50 &amp;&amp; params.media_count > -1) || hasNextPage === false) {
+            options.qs.first = 50;
+            let media = await rp(options);
+            let m = [];
+            let edges = media.data.user.edge_owner_to_timeline_media.edges;
+            for (let i = 0; i &lt; edges.length; i++) {
+                m.push(edges[i].node)
+            }
+            return m;
+        } else {
+
+            let rParams = {
+                endCursor, hasNextPage
+            }
+            let media = await pullAllMedia(rParams, options);
+            let m = [];
+            let edges = media.data.user.edge_owner_to_timeline_media.edges;
+            for (let i = 0; i &lt; edges.length; i++) {
+                m.push(edges[i].node)
+            }
+            return m;
+        }
+
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+pullAllMedia = async (params, options) => {
+    try {
+        let mediaLimit = options.qs.first;
+        let endCursor = params.endCursor;
+        let hasNextPage = params.hasNextPage;
+        options.qs.first = 50;
+        let results = [];
+        let r;
+        while (hasNextPage) {
+            let result = await rp(options);
+            const pageInfo = result.data.user.edge_owner_to_timeline_media.page_info;
+            hasNextPage = pageInfo.has_next_page
+            endCursor = pageInfo.end_cursor;
+            options.qs.after = endCursor;
+            let edges = result.data.user.edge_owner_to_timeline_media.edges;
+            results.push.apply(results, edges);
+            if (hasNextPage === false) {
+                r = result;
+                break;
+            } else {
+                if (mediaLimit !== -1 &amp;&amp; results.length >= mediaLimit) {
+                    r = result;
+                    break;
+                }
+            }
+        }
+
+        if (results.length > mediaLimit &amp;&amp; mediaLimit !== -1) {
+            results = results.slice(0, mediaLimit);
+        }
+        r.data.user.edge_owner_to_timeline_media.edges = results;
+        return r;
+    } catch (error) {
+        throw error;
+    }
+}
+
+loadCachePosts = async (language, params) => {
+    getAllPosts({
+        username: profiles[language],
+        query_hash: params.query_hash,
+        media_count: params.media_count || -1,
+        cookie: params.cookie
+    })
+    .then(posts => {
+        let mediaPosts = posts.filter(el => el.is_video);
+        profilePosts[language] = mediaPosts;
+    })
+    .catch(err => {
+        console.error('Error loading instagram posts', err);
+    })
+}
+
+const defaultConfig = {
+    idChat: '',
+    language: 'en',
+    messageError: '*Ooops, an error occurred while trying to get the video, try again later*',
+}
+/**
+ * Plugin to get videos from life hacks
+ * @function lifehacks
+ * @memberof Plugins
+ * @param {string} idChat - Chat id to send the new image to
+ * @param {string} language - Language to search
+ * @param {string} messageError - Message to send in case of error
+ * @param {string} messageBadLanguage - Message to send when the indicated language is not supported
+ */
+module.exports = {
+    /**
+    * Id - Name of the plugin to use
+    * @property {string}  id - Name of the plugin to use
+    */
+    id: 'lifehacks',
+    /**
+    * Initial setting function
+    * @param {object} data - Initial information for the plugin
+    * @param {string} data.query_hash 
+    * @param {string} data.cookie
+    * @param {number} data.media_count
+    * @param {number} data.timeRefresh
+    */
+    setup(data) {
+        if (
+            data.query_hash &amp;&amp; data.query_hash !== ''
+            &amp;&amp; data.cookie &amp;&amp; data.cookie !== ''
+        ) {
+            let timeRefresh = data.timeRefresh || 120;
+            for (var key in profiles) {
+                loadCachePosts(key, {
+                    query_hash: data.query_hash,
+                    media_count: data.media_count || 1001,
+                    cookie: data.cookie
+                });
+            }
+            setInterval(() => {
+                for (var key in profiles) {
+                    loadCachePosts(key, {
+                        query_hash: data.query_hash,
+                        media_count: data.media_count || 1001,
+                        cookie: data.cookie
+                    });
+                }
+            }, 60000 * timeRefresh);
+        }
+    },
+    plugin(_args) {
+        const _this = this;
+        const args = _this.mergeOpts(defaultConfig, _args);
+        if (args.idChat !== '') {
+            let profile = profiles[args.language];
+            if (typeof profile !== 'undefined' &amp;&amp; profile !== '') {
+                if (profilePosts[args.language].length === 0) {
+                    getLastPosts(profile)
+                    .then(data => {
+                        let mediaPosts = data.filter(el => el.is_video);
+                        let index = Math.floor(Math.random() * mediaPosts.length);
+
+                        convert64.convert(mediaPosts[index].video_url)
+                        .then(async (res) => {
+                            let base64Video = res.split(';base64,').pop();
+                            _this.sendVideo({
+                                "idChat": args.idChat, 
+                                "caption": "",
+                                "file": base64Video
+                            })
+                        })
+                        .catch(err => {
+                            _this.sendMessage({
+                                "idChat": args.idChat, 
+                                "message": args.messageError
+                            });
+                        })
+                    })
+                    .catch(err => {
+                        _this.sendMessage({
+                            "idChat": args.idChat, 
+                            "message": args.messageError
+                        });
+                    })
+                } else {
+                    let index = Math.floor(Math.random() * profilePosts[args.language].length);
+
+                    convert64.convert(profilePosts[args.language][index].video_url)
+                    .then(async (res) => {
+                        let base64Video = res.split(';base64,').pop();
+                        _this.sendVideo({
+                            "idChat": args.idChat, 
+                            "caption": "",
+                            "file": base64Video
+                        })
+                    })
+                    .catch(err => {
+                        _this.sendMessage({
+                            "idChat": args.idChat, 
+                            "message": args.messageError
+                        });
+                    })
+                }
+                
+            } else {
+                _this.sendMessage({
+                    "idChat": args.idChat, 
+                    "message": args.messageBadLanguage
+                });
+            }
+        }
+    }
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+<script src="scripts/search.js"> </script>
+
+</body>
+</html>

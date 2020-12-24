@@ -70,6 +70,7 @@ Below is a list of the plugins that come by default incorporated with the module
 | Cartoon | Plugin to transform your selfie into an cartoon portrait using |
 | Coronavirus | Plugin to obtain information on the coronavirus by countries, cases, deaths, etc |
 | Music | Plugin to get a song in mp3 format directly from soundcloud |
+| Lifehacks | Plugin that allows you to get a video from lifehacks |
 | Meme | Plugin that allows you to send various memes from subreddits in Spanish and English |
 | News | Plugin to get news from the different rss sources that are configured |
 | Translate | Plugin that allows you to translate a text to the language that is requested |
