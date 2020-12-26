@@ -1,0 +1,352 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wabot Documentation plugins/movies.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">Wabot Documentation</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                 
+                    
+                        <a
+                            class="link user-link "
+                            href="https://github.com/luiscruzga/wabot"
+                        >
+                            Github
+                        </a>
+                    
+                        <a
+                            class="link user-link "
+                            href="https://github.com/luiscruzga/wabot/blob/master/example/test.js"
+                        >
+                            Example
+                        </a>
+                    
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+                <div class="search-wrapper">
+                    <input id="search" type="text" placeholder="Search docs..." class="input">
+                </div>
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Namespaces</h3><ul><li><a href="Plugins.html">Plugins</a></li></ul><h3>Classes</h3><ul><li><a href="WABOT.html">WABOT</a></li></ul><h3>Events</h3><ul><li><a href="WABOT.html#event:command">command</a></li><li><a href="WABOT.html#event:message">message</a></li><li><a href="WABOT.html#event:onAddedToGroup">onAddedToGroup</a></li><li><a href="WABOT.html#event:onBattery">onBattery</a></li><li><a href="WABOT.html#event:onMessageFromBloqued">onMessageFromBloqued</a></li><li><a href="WABOT.html#event:onMessageFromNoPrivileges">onMessageFromNoPrivileges</a></li><li><a href="WABOT.html#event:onMessageMediaUploadedEvent">onMessageMediaUploadedEvent</a></li><li><a href="WABOT.html#event:onParticipantsChanged">onParticipantsChanged</a></li><li><a href="WABOT.html#event:onPlugged">onPlugged</a></li><li><a href="WABOT.html#event:onRemovedFromGroup">onRemovedFromGroup</a></li><li><a href="WABOT.html#event:onStateChanged">onStateChanged</a></li><li><a href="WABOT.html#event:ready">ready</a></li><li><a href="WABOT.html#event:vcard">vcard</a></li><li><a href="WABOT.html#event:waitNewAcknowledgements">waitNewAcknowledgements</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>plugins/movies.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// Modules to install separately
+const Xray = require('x-ray');
+const cheerio = require('cheerio');
+const base64 = require('node-base64-image');
+const urlImage = 'https://res.cloudinary.com/drvp1jbjl/image/upload/v1590417729/maxresdefault_plwtyc.jpg';
+
+const escapeRegExp = (string) => {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&amp;");
+}
+
+const replaceAll = (str, term, replacement) => {
+  	return str.replace(new RegExp(escapeRegExp(term), 'g'), replacement);
+}
+
+const replaceEspecialCharacter = (str) => {
+	var chars={
+		"á":"a", "é":"e", "í":"i", "ó":"o", "ú":"u",
+		"à":"a", "è":"e", "ì":"i", "ò":"o", "ù":"u",
+		"Á":"A", "É":"E", "Í":"I", "Ó":"O", "Ú":"U",
+		"À":"A", "È":"E", "Ì":"I", "Ò":"O", "Ù":"U"}
+	var expr=/[áàéèíìóòúù]/ig;
+	var res=str.replace(expr,function(e){return chars[e]});
+	return res;
+}
+
+const searchDetail = (in_url) => {
+	return new Promise(function(resolve, reject) {
+		var xray = Xray();
+		var ofertas = [];
+        xray(in_url, 'body@html')(function(err, body){
+            if (!err){
+                var $ = cheerio.load(body);
+				let directors = [];
+				let actors = [];
+				let metadata = {
+					url: in_url,
+					title: '',
+					director: '',
+					image: '',
+					actors: '',
+					year: '',
+					duration: '',
+					punctuation: '',
+					description: ''
+				}
+
+				$('#ficha > div > div > div > div.col-md-9.col-md-offset-1.col-xs-12.col-sm-offset-1 > h1').each((index, element) => {
+					metadata.title = $(element).text().trim() || '';
+				});
+				$("span[itemprop='director']").each((index, element) => {
+					directors.push($(element).text().trim() || '');
+				});
+				metadata.director = directors.join(' - ');
+				$("meta[itemprop='image']").each((index, element) => {
+					metadata.image = $(element).attr('content') || '';
+				});
+				$("span[itemprop='actor']").each((index, element) => {
+					actors.push($(element).text().trim() || '');
+				});
+				metadata.actors = actors.join(' - ');
+				$("meta[itemprop='dateCreated']").each((index, element) => {
+					metadata.year = $(element).attr('content') || '';
+				});
+				let displayDuration = false;
+				$('#ficha > div > div > div > div.col-lg-5.col-md-7.col-md-offset-1.col-sm-8.col-sm-offset-1 > div:nth-child(1) > div').each((index, element) => {
+					if(displayDuration){
+						metadata.duration = $(element).text().trim();
+						displayDuration = false;
+					}else {
+						if (!isNaN($(element).text().trim())){
+							displayDuration = true;
+						}else {
+							displayDuration = false;
+						}
+					}
+				});
+				$('div.inforating > div.rating.pull-left').each((index, element) => {
+					metadata.punctuation = $(element).data('score') || '';
+				});
+				$('#ficha > div > div > div > div.col-lg-5.col-md-7.col-md-offset-1.col-sm-8.col-sm-offset-1 > div:nth-child(2)').each((index, element) => {
+					metadata.description = $(element).text().trim() || '';
+				});
+
+				if (metadata.description !== ''){
+					resolve(metadata);
+				}else {
+					reject('No data found');
+				}
+            }else {
+				reject('Error');
+			}
+        })
+	})
+}
+
+const searchMovies = (in_search) => {
+	return new Promise(function(resolve, reject) {
+		var xray = Xray();
+		var movies = [];
+		let url = `https://playview.io/search/${ encodeURI(in_search) }`;
+        xray(url, 'body@html')(function(err, body){
+            if (!err){
+                var $ = cheerio.load(body);
+				let movieUrl, node;
+				$('.container-fluid > .row > .covers').children('.spotlight_container').each((index, element) => {
+					node = $(element);
+					movieUrl = node.children('a').attr('href');
+					if (movieUrl.indexOf('ver-temporadas') === -1){
+						movies.push(movieUrl);
+					}
+				});
+
+				if (movies.length > 0){
+					searchDetail(movies[Math.floor(Math.random() * movies.length)])
+					.then(movie => {
+						resolve(movie);
+					})
+					.catch(err => {
+						reject(err);
+					})
+				}else {
+					reject('No data found');
+				}
+            }else {
+				reject('Error');
+			}
+        })
+	})
+}
+
+const defaultConfig = {
+    idChat: '',
+    photo: '',
+    messageError: '*Ooops, an error occurred while transforming the image, please try again later*',
+    messageNoDataFound: '*The requested movie could not be found*'
+}
+/**
+ * Plugin that allows you to obtain movies to watch online in different qualities
+ * @function movie
+ * @memberof Plugins
+ * @param {string} idChat - Chat id to send the new image to
+ * @param {string} search - Movie to search
+ * @param {string} messageError - Message to send in case of error
+ * @param {string} messageNoDataFound - Message to send when no movie is found
+ */
+module.exports = {
+    /**
+    * Id - Name of the plugin to use
+    * @property {string}  id - Name of the plugin to use
+    */
+    id: 'movie',
+    plugin(_args) {
+        const _this = this;
+        const args = this.mergeOpts(defaultConfig, _args);
+        if (args.idChat !== '') {
+            if (args.search === '') {
+                _this.sendMessage({
+                    "idChat": args.idChat, 
+                    "message": args.messageNoDataFound
+                });
+            } else {
+                searchMovies(args.search.trim())
+                .then(data => {
+                    let message = `*-Title:* _${data.title}_ \n`;
+                    message += `*-Director:* _${data.director}_ \n`;
+                    message += `*-Year:* _${data.year}_ \n`;
+                    message += `*-Duration:* _${data.duration}_ \n`;
+                    message += `*-Punctuation:* _${data.punctuation} / 5_ \n`;
+                    message += `*-Actors:* _${data.actors}_ \n`;
+                    message += `*-Description:* _${data.description}_ \n`;
+
+                    let options = {string: true};
+                    base64.encode(urlImage, options, function(err, data64){
+                        if(!err){
+                            _this.sendMessage({
+                                "idChat": args.idChat, 
+                                "message": message
+                            });
+                            _this.sendLink({
+                                "idChat": args.idChat,
+                                "description": data.description,
+                                "title": data.title,
+                                "thumb": data64,
+                                "link": data.url
+                            });
+                        }else {
+                            _this.sendMessage({
+                                "idChat": args.idChat, 
+                                "message": args.messageError
+                            });
+                        }
+                    })
+                })
+                .catch(err => {
+                    if(err == 'Error'){
+                        _this.sendMessage({
+                            "idChat": args.idChat, 
+                            "message": args.messageError
+                        });
+                    }else{
+                        _this.sendMessage({
+                            "idChat": args.idChat, 
+                            "message": args.messageNoDataFound
+                        });
+                    }
+                })
+            }
+        }
+    }
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+<script src="scripts/search.js"> </script>
+
+</body>
+</html>
