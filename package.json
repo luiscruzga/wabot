@@ -53,6 +53,7 @@
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
     "sharp": "^0.26.3",
+    "toonify": "^1.0.0",
     "util": "^0.12.3",
     "vcard": "^0.1.0",
     "vcards-js": "^2.10.0",
