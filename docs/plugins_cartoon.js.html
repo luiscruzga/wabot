@@ -110,15 +110,9 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>// Modules to install separately
-const deepai = require('deepai');
-const fs = require('fs');
-const path = require('path');
-const base64 = require('node-base64-image');
-const ConvertBase64 = require('../lib/convertBase64');
-const convert64 = new ConvertBase64();
+const toonify = require('toonify');
+var cartoon;
 var apiKey = '';
-
-function randomUUI(a,b){for(b=a='';a++&lt;36;b+=a*51&amp;52?(a^15?8^Math.random()*(a^20?16:4):4).toString(16):'');return b}
 
 const defaultConfig = {
     idChat: '',
@@ -150,7 +144,7 @@ module.exports = {
     setup(data) {
         if (data.apiKey &amp;&amp; data.apiKey !== '') {
             apiKey = data.apiKey;
-            deepai.setApiKey(apiKey);
+            cartoon = new toonify(data.apiKey);
         }
     },
     plugin(_args) {
@@ -161,35 +155,13 @@ module.exports = {
                 if (apiKey === '') {
                     console.error('An api key must be provided.');
                 } else {
-                    convert64.convert(args.photo)
-                    .then(async (res) => {
-                        let nameFile = randomUUI();
-                        let pathImage = path.join(__dirname, `./images/${ nameFile }.jpeg`);
-                        let base64Image = res.split(';base64,').pop();
-                        fs.writeFileSync(pathImage, base64Image, {encoding: 'base64'}, (err) => {
-                            if(err) log.error('File created with error');
-                        });
-                        var resp = await deepai.callStandardApi("toonify", {
-                            image: fs.createReadStream(pathImage)
-                        });
-                        fs.unlinkSync(pathImage);
-                        if (typeof resp.output_url !== 'undefined'){
-                            let options = {string: true}
-                            base64.encode(resp.output_url, options, function(err, data64){
-                                if(err){
-                                    _this.sendMessage({
-                                        "idChat": args.idChat, 
-                                        "message": args.messageError
-                                    });
-                                }else{
-                                    _this.sendImage({
-                                        "idChat": args.idChat, 
-                                        "caption": "",
-                                        "file": data64
-                                    })
-                                }
-                            })
-                        }
+                    cartoon.transform({ photo: args.photo })
+                    .then(data => {
+                        _this.sendImage({
+                            "idChat": args.idChat, 
+                            "caption": "",
+                            "file": data.base64Image
+                        })
                     })
                     .catch(err => {
                         _this.sendMessage({

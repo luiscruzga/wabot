@@ -1,12 +1,6 @@
 // Modules to install separately
-const request = require('request');
-const fs = require('fs');
-const path = require('path');
-const sharp = require('sharp');
-const ConvertBase64 = require('../lib/convertBase64');
-const convert64 = new ConvertBase64();
-
-function randomUUI(a,b){for(b=a='';a++<36;b+=a*51&52?(a^15?8^Math.random()*(a^20?16:4):4).toString(16):'');return b}
+const makemeazombie = require('makemeazombie');
+const zombie = new makemeazombie();
 
 const defaultConfig = {
     idChat: '',
@@ -40,66 +34,26 @@ module.exports = {
                     "message": args.messageNoImage
                 });
             } else {
-                convert64.convert(args.photo)
-                .then(res => {
-                    let base64Image = res.split(';base64,').pop();
-                    let nameFile = randomUUI();
-                    let pathImage = path.join(__dirname, `./images/${ nameFile }.jpeg`);
-                    fs.writeFileSync(pathImage, base64Image, {encoding: 'base64'}, (err) => {
-                        if(err) console.error('File created with error');
-                    });
-                    
-                    request.post({
-                        url: 'https://zombieapi.azurewebsites.net/transform',
-                        contentType: false,
-                        formData: {
-                            image: fs.createReadStream(pathImage)
-                        }
-                    }, async (error, response, body) => {
-                        // Delete image
-                        fs.unlinkSync(pathImage);
-
-                        if (error){
-                            this.sendMessage({
-                                "idChat": args.idChat,
-                                "message": args.messageError
-                            });
-                        } else {
-                            if (body === 'No face found') {
-                                this.sendMessage({
-                                    "idChat": args.idChat,
-                                    "message": args. messageNoFace
-                                });
-                            } else {
-                                let imgBuffer =  Buffer.from(body, 'base64');
-                                sharp(imgBuffer)
-                                .extract({ width: 512, height: 512, left: 512, top: 0 })
-                                .resize(720, 720)
-                                .toBuffer()
-                                .then( buffer => {
-                                    this.sendImage({
-                                        "idChat": args.idChat, 
-                                        "caption": "",
-                                        "file": buffer.toString('base64')
-                                    })
-                                })
-                                .catch( err => {
-                                    this.sendMessage({
-                                        "idChat": args.idChat,
-                                        "message": args.messageError
-                                    });
-                                })
-
-                            }
-                        }
-                    });
+                zombie.transform({ photo: args.photo })
+                .then(data64 => {
+                    this.sendImage({
+                        "idChat": args.idChat, 
+                        "caption": "",
+                        "file": data64
+                    })
                 })
                 .catch(err => {
-                    console.error(`Error converting to base64.`);
-                    this.sendMessage({
-                        "idChat": args.idChat, 
-                        "message": args.messageError
-                    });
+                    if (error === 'It was not possible to identify a face in the image, try sending a profile image') {
+                        this.sendMessage({
+                            "idChat": args.idChat,
+                            "message": args. messageNoFace
+                        });
+                    } else {
+                        this.sendMessage({
+                            "idChat": args.idChat,
+                            "message": args.messageError
+                        });
+                    }
                 })
             }
         }

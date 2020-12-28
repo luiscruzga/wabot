@@ -42,6 +42,7 @@
     "jsdoc": "^3.6.6",
     "jsdoc-template": "^1.2.0",
     "lodash": "^4.17.20",
+    "makemeazombie": "^1.0.0",
     "merge-anything": "^3.0.6",
     "moment": "^2.29.1",
     "node-base64-image": "^1.0.7",
