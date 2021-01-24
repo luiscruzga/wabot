@@ -8,7 +8,7 @@
     "heigth": 728,
     "dowloadChromeVersion": false,
     "chromeVersion": 737027,
-    "localChromePath": "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe",
+    "localChromePath": "",
     "getInitScreenshot": false,
     "pathScreenshot": "./screenshot.png",
     "args": [
