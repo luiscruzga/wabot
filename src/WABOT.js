@@ -432,7 +432,11 @@ class WABOT extends EventEmitter {
                     if (this.callbacks[args.idChat].customValues.length > 0) {
                         value = this.callbacks[args.idChat].customValues[response].value;
                     } else {
-                        value = this.callbacks[args.idChat].intent.params[currentParam].values[response];
+                        if (typeof this.callbacks[args.idChat].intent.params[currentParam].values[response] === 'object') {
+                            value = this.callbacks[args.idChat].intent.params[currentParam].values[response].value;
+                        } else {
+                            value = this.callbacks[args.idChat].intent.params[currentParam].values[response];
+                        }
                     }
                 } else {
                     value = response;
