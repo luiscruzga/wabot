@@ -340,7 +340,7 @@ class WABOT extends EventEmitter {
                                 _find = true;
                             }
                         }else{
-                            PartialMatch = this.intentConfig.commands.find(obj => obj.contains.find(ex => _message.toLowerCase().search(ex.toLowerCase()) > -1));
+                            PartialMatch = this.intentConfig.commands.find(obj => obj.contains !== undefined && obj.contains.find(ex => _message.toLowerCase().search(ex.toLowerCase()) > -1));
                             if (PartialMatch != undefined) {
                                 _match = PartialMatch;
                                 _find = true;
@@ -584,6 +584,14 @@ class WABOT extends EventEmitter {
                 }
             });
         }
+    }
+
+    addCommand (command) {
+        this.intentConfig.commands.push(command);
+    }
+
+    deleteCommand (commandName) {
+        this.intentConfig.commands = this.intentConfig.commands.filter(el => el.name !== commandName);
     }
     /**
      * Send text as image 
