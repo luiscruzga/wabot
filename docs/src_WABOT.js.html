@@ -451,7 +451,7 @@ class WABOT extends EventEmitter {
                                 _find = true;
                             }
                         }else{
-                            PartialMatch = this.intentConfig.commands.find(obj => obj.contains.find(ex => _message.toLowerCase().search(ex.toLowerCase()) > -1));
+                            PartialMatch = this.intentConfig.commands.find(obj => obj.contains !== undefined &amp;&amp; obj.contains.find(ex => _message.toLowerCase().search(ex.toLowerCase()) > -1));
                             if (PartialMatch != undefined) {
                                 _match = PartialMatch;
                                 _find = true;
@@ -540,7 +540,15 @@ class WABOT extends EventEmitter {
                 let param = this.callbacks[args.idChat].intent.params[currentParam].name;
                 let value;
                 if (typeof _possibleValues === 'object'){
-                    value = this.callbacks[args.idChat].intent.params[currentParam].values[response];
+                    if (this.callbacks[args.idChat].customValues.length > 0) {
+                        value = this.callbacks[args.idChat].customValues[response].value;
+                    } else {
+                        if (typeof this.callbacks[args.idChat].intent.params[currentParam].values[response] === 'object') {
+                            value = this.callbacks[args.idChat].intent.params[currentParam].values[response].value;
+                        } else {
+                            value = this.callbacks[args.idChat].intent.params[currentParam].values[response];
+                        }
+                    }
                 } else {
                     value = response;
                 }
@@ -585,6 +593,7 @@ class WABOT extends EventEmitter {
         let index = args.idParam;
         let _values = {};
         let _possibleValues = {};
+        let _customValues = [];
         let cont = 0;
         if (this.validCallback({idChat: args.idChat})){
             _values = this.callbacks[args.idChat].values;
@@ -593,8 +602,27 @@ class WABOT extends EventEmitter {
         }
 
         if (Array.isArray(args.intent.params[index].values)){
-            args.intent.params[index].values.forEach((value) => {
-                _possibleValues[cont] = [(cont+1).toString(), value];
+            // If custom values ​​are configured
+            let valuesToDisplay = [];
+            if (args.intent.params[index].customValues &amp;&amp; args.intent.params[index].customValues.length > 0) {
+                args.intent.params[index].customValues.forEach(customValue => {
+                    if (_values[customValue.param] !== undefined 
+                        &amp;&amp; _values[customValue.param] === customValue.paramValue
+                    ) {
+                        _customValues.push(customValue);
+                        valuesToDisplay.push(customValue);
+                    }
+                })
+            }
+            if (valuesToDisplay.length === 0) {
+                valuesToDisplay = args.intent.params[index].values;
+            }
+            valuesToDisplay.forEach((value) => {
+                if (typeof value === 'object'){
+                    _possibleValues[cont] = [(cont+1).toString(), value.display, value.value];
+                } else {
+                    _possibleValues[cont] = [(cont+1).toString(), value];
+                }
                 ++cont;
             });
         } else {
@@ -610,11 +638,16 @@ class WABOT extends EventEmitter {
             isFinished: false,
             possibleValues: _possibleValues,
             values: _values,
+            customValues: _customValues
         }
 
         let text = getRandomItem(args.intent.params[index].request) + String.fromCharCode(10);
         for (var i=0; i&lt;cont; i++){
-            text += _possibleValues[(i).toString()].join('.- ') + String.fromCharCode(10);
+            let options = [];
+            options.push(_possibleValues[(i).toString()][0]);
+            options.push(_possibleValues[(i).toString()][1]);
+            //text += _possibleValues[(i).toString()].join('.- ') + String.fromCharCode(10);
+            text += options.join('.- ') + String.fromCharCode(10);
         }
         
         this.sendMessage({
@@ -662,6 +695,14 @@ class WABOT extends EventEmitter {
                 }
             });
         }
+    }
+
+    addCommand (command) {
+        this.intentConfig.commands.push(command);
+    }
+
+    deleteCommand (commandName) {
+        this.intentConfig.commands = this.intentConfig.commands.filter(el => el.name !== commandName);
     }
     /**
      * Send text as image 
@@ -728,6 +769,32 @@ class WABOT extends EventEmitter {
             .then(res => {
                 args.file = res;
                 let data = types.valid('image', args);
+                if (data.isValid){
+                    this._wabot.sendMessage(data.data);
+                }else {
+                    console.error(data.messageInvalid);
+                }
+            })
+            .catch(err => {
+                console.error(`Error converting to base64.`, err);
+            })
+        }
+    }
+
+    /**
+     * Send a file 
+     * @param {object} args - The message info
+     * @param {string} args.idChat - Id Chat
+     * @param {string} args.idMessage - Id of message to reply
+     * @param {string} args.caption - Caption to display in the message 
+     * @param {string} args.file - Url, base64 or path to the file
+     */
+    sendFile(args){
+        if (typeof args.file !== 'undefined' &amp;&amp; args.file !== ''){
+            convert64.convert(args.file)
+            .then(res => {
+                args.file = res;
+                let data = types.valid('document', args);
                 if (data.isValid){
                     this._wabot.sendMessage(data.data);
                 }else {

@@ -671,6 +671,32 @@ class WABOT extends EventEmitter {
     }
 
     /**
+     * Send a file 
+     * @param {object} args - The message info
+     * @param {string} args.idChat - Id Chat
+     * @param {string} args.idMessage - Id of message to reply
+     * @param {string} args.caption - Caption to display in the message 
+     * @param {string} args.file - Url, base64 or path to the file
+     */
+    sendFile(args){
+        if (typeof args.file !== 'undefined' && args.file !== ''){
+            convert64.convert(args.file)
+            .then(res => {
+                args.file = res;
+                let data = types.valid('document', args);
+                if (data.isValid){
+                    this._wabot.sendMessage(data.data);
+                }else {
+                    console.error(data.messageInvalid);
+                }
+            })
+            .catch(err => {
+                console.error(`Error converting to base64.`, err);
+            })
+        }
+    }
+
+    /**
      * Send a video file 
      * @param {object} args - The message info
      * @param {string} args.idChat - Id Chat

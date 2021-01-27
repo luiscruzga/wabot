@@ -77,6 +77,16 @@ window.responseServer = async (response) => {
                 WAPI.sendImage("data:image/jpeg;base64,"+response.file, response.idChat, _fileName, response.caption, '');
             }
             break;
+        case 'document': 
+            _uui = randomUUI();
+            
+            _fileName = response.fileName || "file"+_uui;
+            if (response.replyMessage){
+                WAPI.sendFile("data:audio/mpeg;base64,"+response.file, response.idChat, _fileName, response.caption, response.idMessage);
+            }else {
+                WAPI.sendFile("data:audio/mpeg;base64,"+response.file, response.idChat, _fileName, response.caption);
+            }
+            break;
         case 'video': 
             _uui = randomUUI();
             _fileName = "video"+_uui+".mp4";

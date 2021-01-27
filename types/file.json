@@ -7,6 +7,7 @@
         "replyMessage": false,
         "caption": "",
         "isGif": true,
-        "file": ""
+        "file": "",
+        "fileName": ""
     }
 }

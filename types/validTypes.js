@@ -30,7 +30,7 @@ class Types {
                 case 'text2image':
                     typeDefault = typeText2Image;
                     break;
-                case 'image': case 'video': case 'gif': case 'music':
+                case 'image': case 'video': case 'gif': case 'music': case 'document':
                     typeDefault = typeFile;
                     break;
                 case 'sticker':

@@ -1688,6 +1688,30 @@ window.WAPI.sendMusic = function (imgBase64, chatid, filename, caption, quotedMs
     });
 }
 
+window.WAPI.sendFile = function (fileBase64, chatid, filename, caption, quotedMsg, done) {
+    //var idUser = new window.Store.UserConstructor(chatid);
+    var idUser = new window.Store.UserConstructor(chatid, { intentionallyUsePrivateConstructor: true });
+    let extras = {};
+    if (quotedMsg && quotedMsg !== '') {
+        if (typeof quotedMsg !== "object") quotedMsg = Store.Msg.get(quotedMsg);
+        extras = {
+            quotedMsg,
+            quotedParticipant: quotedMsg.author || quotedMsg.from,
+            quotedStanzaID: quotedMsg.id.id
+        }
+    }
+    // create new chat
+    return Store.Chat.find(idUser).then((chat) => {
+        var mediaBlob = window.WAPI.base64ImageToFile(fileBase64, filename);
+        var mc = new Store.MediaCollection(chat);
+        mc.processAttachments([{file: mediaBlob}, 1], chat, 1).then(() => {
+            var media = mc.models[0];
+            media.sendToChat(chat, { caption: caption, ...extras });
+            if (done !== undefined) done(true);
+        });
+    });
+}
+
 /**
  * This function sts the profile name of the number.
  * @param newName - string the new name to set as profile name
