@@ -34,5 +34,6 @@
     },
     "blocked": [],
     "whiteList": [],
-    "commands": []
+    "commands": [],
+    "downloadPath": "../download/"
 }

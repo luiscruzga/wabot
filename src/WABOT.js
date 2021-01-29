@@ -18,6 +18,8 @@ const getRandomItem = (array) => {
     return array[Math.floor(Math.random()*array.length)]
 }
 
+const randomUUI = (a,b) => {for(b=a='';a++<36;b+=a*51&52?(a^15?8^Math.random()*(a^20?16:4):4).toString(16):'');return b}
+
 const escapeRegExp = (string) => {
     return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -87,6 +89,7 @@ const replaceAll = (str, term, replacement) => {
  * @param {string[]} opts.intentConfig.commands.params.request - Questions to request the parameter
  * @param {string[]} opts.intentConfig.commands.params.values - Allowed values. If any is allowed, "any" must be indicated
  * @param {string[]} opts.intentConfig.commands.params.badResponse - Messages to send in case of illegal values
+ * @param {string} opt.intentConfig.downloadPath - Folder for download files when params is required
  * @param {object} opts.session - Object containing session information. Can be used to restore the session.
  * @param {string} opts.session.WABrowserId
  * @param {string} opts.session.WASecretBundle
@@ -310,8 +313,16 @@ class WABOT extends EventEmitter {
                         _this.emitMessage('vcard', arg);
                     });
                     break;
-                case "document": case "sticker": case "video": case "gif":
+                case "sticker": case "video": case "gif":
                     _this.emitMessage('message', arg);
+                    break;
+                case "document": 
+                    if (!_this.validCallbackResponse({
+                        idChat: arg.data.from, 
+                        message: arg
+                    })){
+                        _this.emitMessage('message', arg);
+                    }
                     break;
                 default:
                     
@@ -325,7 +336,7 @@ class WABOT extends EventEmitter {
                         _message = arg.data.caption;
                     }
                     exactMatch = this.intentConfig.commands.find(obj => obj.exact.find(ex => ex.toLowerCase() == _message.toLowerCase()));
-                    if (exactMatch != undefined) {
+                    if (exactMatch !== undefined) {
                         response.params = Params.getParams(exactMatch, '');
                         _match = exactMatch;
                         _find = true;
@@ -342,6 +353,7 @@ class WABOT extends EventEmitter {
                         }else{
                             PartialMatch = this.intentConfig.commands.find(obj => obj.contains !== undefined && obj.contains.find(ex => _message.toLowerCase().search(ex.toLowerCase()) > -1));
                             if (PartialMatch != undefined) {
+                                if (PartialMatch.isFile) PartialMatch['values'] = "any";
                                 _match = PartialMatch;
                                 _find = true;
                             }
@@ -398,7 +410,7 @@ class WABOT extends EventEmitter {
         }
     }
 
-    validCallbackResponse(args){
+    async validCallbackResponse(args){
         if (this.validCallback({idChat: args.idChat})){
             let caption = "";
             if (args.message.data.type === 'chat'){
@@ -409,8 +421,16 @@ class WABOT extends EventEmitter {
             caption = caption.trim().toLowerCase();
             const _possibleValues = this.callbacks[args.idChat].possibleValues;
             let currentParam = this.callbacks[args.idChat].currentParam;
+            const requireFile = this.callbacks[args.idChat].requireFile;
             let response;
-            if (typeof _possibleValues === 'object'){
+            if (requireFile) {
+                if (args.message.data.type === 'document') {
+                    const file = await this.downloadFile(args.message.data.id);
+                    const pathFile = path.join(this.intentConfig.downloadPath, `${randomUUI()}${path.extname(args.message.data.filename)}`);
+                    fs.writeFileSync(pathFile, file.split(';base64,').pop(), {encoding: 'base64'});
+                    response = pathFile;
+                }
+            } else if (typeof _possibleValues === 'object'){
                 response = Object.keys(_possibleValues).find(key => _possibleValues[key].find(obj => obj.toLowerCase() == caption));
             } else {
                 if ( _possibleValues === 'any' ) {
@@ -428,20 +448,21 @@ class WABOT extends EventEmitter {
             if (response !== undefined && response !== '') {
                 let param = this.callbacks[args.idChat].intent.params[currentParam].name;
                 let value;
-                if (typeof _possibleValues === 'object'){
-                    if (this.callbacks[args.idChat].customValues.length > 0) {
-                        value = this.callbacks[args.idChat].customValues[response].value;
-                    } else {
-                        if (typeof this.callbacks[args.idChat].intent.params[currentParam].values[response] === 'object') {
-                            value = this.callbacks[args.idChat].intent.params[currentParam].values[response].value;
+                if (requireFile) value = response;
+                else 
+                    if (typeof _possibleValues === 'object'){
+                        if (this.callbacks[args.idChat].customValues.length > 0) {
+                            value = this.callbacks[args.idChat].customValues[response].value;
                         } else {
-                            value = this.callbacks[args.idChat].intent.params[currentParam].values[response];
+                            if (typeof this.callbacks[args.idChat].intent.params[currentParam].values[response] === 'object') {
+                                value = this.callbacks[args.idChat].intent.params[currentParam].values[response].value;
+                            } else {
+                                value = this.callbacks[args.idChat].intent.params[currentParam].values[response];
+                            }
                         }
+                    } else {
+                        value = response;
                     }
-                } else {
-                    value = response;
-                }
-
                 this.callbacks[args.idChat].values[param] = value;
                 currentParam = Params.getNextPendingValue(this.callbacks[args.idChat].intent, this.callbacks[args.idChat].values);
                 if (currentParam === 'no_data') {
@@ -490,7 +511,10 @@ class WABOT extends EventEmitter {
             _values = args.values;
         }
 
-        if (Array.isArray(args.intent.params[index].values)){
+        let isFile = false;
+        if (args.intent.params[index].isFile) {
+            isFile = args.intent.params[index].isFile;
+        } else if (Array.isArray(args.intent.params[index].values)){
             // If custom values ​​are configured
             let valuesToDisplay = [];
             if (args.intent.params[index].customValues && args.intent.params[index].customValues.length > 0) {
@@ -525,6 +549,7 @@ class WABOT extends EventEmitter {
             intent: args.intent, 
             currentParam: index,
             isFinished: false,
+            requireFile: isFile,
             possibleValues: _possibleValues,
             values: _values,
             customValues: _customValues

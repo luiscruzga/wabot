@@ -15,7 +15,9 @@ const assignParams = (userParams, intent) => {
     if (intent.params && intent.params.length > 0){
         intent.params.forEach((intentParam) => {
             // Get user supplied value
-            if (!intentParam.isNumber){
+            if (intentParam.isFile) {
+                values[intentParam.name] = '';
+            } else if (!intentParam.isNumber){
                 let valueParam = Object.keys(intentParam.values).find(key => Object.keys(userParams).find(el => userParams[el].toLowerCase().trim() === intentParam.values[key].toLowerCase().trim()))
                 values[intentParam.name] = typeof valueParam !== 'undefined' ? intentParam.values[valueParam] : '';
             } else {
@@ -27,15 +29,17 @@ const assignParams = (userParams, intent) => {
             let pendingParams = userParams.filter(param => !Object.keys(values).find(key => values[key].toLowerCase().trim() === param.toLowerCase().trim()));
             pendingValues.forEach(pendingValue => {
                 const _param = intent.params.find(obj => obj.name === pendingValue);
-                if (_param.isNumber && _param.values === 'any'){
-                    let _value = pendingParams.find(el => !isNaN(parseInt(el)));
-                    if (_value !== undefined){
-                        values[pendingValue] = _value;
-                        pendingParams.splice(pendingParams.indexOf(_value),1);
+                if (!_param.isFile) {
+                    if (_param.isNumber && _param.values === 'any'){
+                        let _value = pendingParams.find(el => !isNaN(parseInt(el)));
+                        if (_value !== undefined){
+                            values[pendingValue] = _value;
+                            pendingParams.splice(pendingParams.indexOf(_value),1);
+                        }
+                    } else if (_param.values === 'any' && pendingParams.length > 0) {
+                        values[pendingValue] = pendingParams[0];
+                        pendingParams.splice(0,1);
                     }
-                } else if (_param.values === 'any' && pendingParams.length > 0) {
-                    values[pendingValue] = pendingParams[0];
-                    pendingParams.splice(0,1);
                 }
             });
             if (pendingParams.length > 0) {
@@ -72,7 +76,6 @@ Params.getParams = (_command, arguments) => {
         }
         Array.prototype.push.apply(params, arguments.split(' '));
         params = params.filter(el => el !== '');
-
         let values = assignParams(params, _command);
         return values;
     }
