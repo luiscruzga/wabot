@@ -89,7 +89,6 @@ const replaceAll = (str, term, replacement) => {
  * @param {string[]} opts.intentConfig.commands.params.request - Questions to request the parameter
  * @param {string[]} opts.intentConfig.commands.params.values - Allowed values. If any is allowed, "any" must be indicated
  * @param {string[]} opts.intentConfig.commands.params.badResponse - Messages to send in case of illegal values
- * @param {string} opt.intentConfig.downloadPath - Folder for download files when params is required
  * @param {object} opts.session - Object containing session information. Can be used to restore the session.
  * @param {string} opts.session.WABrowserId
  * @param {string} opts.session.WASecretBundle
@@ -1193,7 +1192,12 @@ class WABOT extends EventEmitter {
             console.info("You must first be logged in.");
         }
     }
-
+    /**
+     * To know if the process is ready
+     */
+    isReady() {
+        return this.isLogged;
+    }
     /**
      * Start session on whatsapp web 
      */
