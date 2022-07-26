@@ -22,7 +22,6 @@ window.text2Image = (in_text) => {
     var data = textImage.toDataURL(in_text);
     return data;
 }
-
 window.responseServer = async (response) => {
     var _uui, _image, _chats, _fileName, _image, _file_, _encrypted, _idChat_, _dataArray;
     if (intents.executions.simulateTyping){
@@ -119,16 +118,23 @@ window.responseServer = async (response) => {
             }
             _file_ = window.WAPI.base64ImageToFile("data:image/webp;base64,"+response.file, `sticker${_uui}.webp`);
             _encrypted = await WAPI.encryptAndUploadFile("sticker", _file_);
+            _image.clientUrl = _encrypted.clientUrl;
             _image.url = _encrypted.clientUrl;
+            _image.deprecatedMms3Url = _encrypted.clientUrl;
             _image.mediaKey = _encrypted.mediaKey;
             _image.mediaKeyTimestamp = _encrypted.mediaKeyTimestamp;
             _image.filehash = _encrypted.filehash;
             _image.uploadhash = _encrypted.uploadhash;
             _image.directPath = _encrypted.directPath;
+            _image.type = 'sticker';
+            const _sticker = {
+                ..._image,
+                ..._encrypted,
+            }
             if (response.replyMessage){
-                WAPI.sendSticker(_image, response.idChat, response.idMessage);
+                WAPI.sendSticker(_sticker, response.idChat, response.idMessage);
             }else {
-                WAPI.sendSticker(_image, response.idChat);
+                WAPI.sendSticker(_sticker, response.idChat);
             }
             break;
         case 'link':
