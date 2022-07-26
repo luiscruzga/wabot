@@ -1,6 +1,6 @@
 {
   "name": "wabot",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Whatsapp Bot Module for automate response and interact whit users",
   "main": "src/WABOT.js",
   "scripts": {
@@ -24,7 +24,7 @@
   "author": "Luis Cruz",
   "license": "ISC",
   "dependencies": {
-    "@k3rn31p4nic/google-translate-api": "^1.1.1",
+    "@vitalets/google-translate-api": "^8.0.0",
     "ascii-table": "0.0.9",
     "axios": "^0.21.0",
     "cheerio": "^1.0.0-rc.3",

@@ -1,5 +1,5 @@
 // Modules to install separately
-const translate = require('@k3rn31p4nic/google-translate-api');
+const translate = require('@vitalets/google-translate-api');
 
 const defaultConfig = {
     idChat: '',

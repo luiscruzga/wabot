@@ -1,3 +1,4 @@
 node_modules/
 ChromeSession/
 debug.log
+.vscode/*

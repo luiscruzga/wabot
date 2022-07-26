@@ -285,7 +285,7 @@ class WABOT extends EventEmitter {
         
     }
 
-    getNewMessages(arg) {
+    async getNewMessages(arg) {
         let _this = this;
         if (this.intentConfig.commands.length === 0) {
             switch (arg.data.type) {
@@ -303,7 +303,7 @@ class WABOT extends EventEmitter {
                     _this.emitMessage('message', arg);
                     break;
             }
-        }else {
+        } else {
             switch (arg.data.type) {
                 case "vcard":
                     vcard.extractVcard(arg.data.content)
@@ -316,7 +316,7 @@ class WABOT extends EventEmitter {
                     _this.emitMessage('message', arg);
                     break;
                 case "document": 
-                    if (!_this.validCallbackResponse({
+                    if (!await _this.validCallbackResponse({
                         idChat: arg.data.from, 
                         message: arg
                     })){
@@ -360,11 +360,10 @@ class WABOT extends EventEmitter {
                     }
 
                     if (!_find) {
-                        if (!_this.validCallbackResponse({
+                        if (!await _this.validCallbackResponse({
                             idChat: arg.data.from, 
                             message: arg
-                        })){
-                            
+                        })) {
                             _this.emitMessage('message', arg);
                         }
                     } else {
@@ -448,20 +447,19 @@ class WABOT extends EventEmitter {
                 let param = this.callbacks[args.idChat].intent.params[currentParam].name;
                 let value;
                 if (requireFile) value = response;
-                else 
-                    if (typeof _possibleValues === 'object'){
-                        if (this.callbacks[args.idChat].customValues.length > 0) {
-                            value = this.callbacks[args.idChat].customValues[response].value;
-                        } else {
-                            if (typeof this.callbacks[args.idChat].intent.params[currentParam].values[response] === 'object') {
-                                value = this.callbacks[args.idChat].intent.params[currentParam].values[response].value;
-                            } else {
-                                value = this.callbacks[args.idChat].intent.params[currentParam].values[response];
-                            }
-                        }
+                else if (typeof _possibleValues === 'object'){
+                    if (this.callbacks[args.idChat].customValues.length > 0) {
+                        value = this.callbacks[args.idChat].customValues[response].value;
                     } else {
-                        value = response;
+                        if (typeof this.callbacks[args.idChat].intent.params[currentParam].values[response] === 'object') {
+                            value = this.callbacks[args.idChat].intent.params[currentParam].values[response].value;
+                        } else {
+                            value = this.callbacks[args.idChat].intent.params[currentParam].values[response];
+                        }
                     }
+                } else {
+                    value = response;
+                }
                 this.callbacks[args.idChat].values[param] = value;
                 currentParam = Params.getNextPendingValue(this.callbacks[args.idChat].intent, this.callbacks[args.idChat].values);
                 if (currentParam === 'no_data') {
