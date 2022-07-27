@@ -23,7 +23,6 @@ window.text2Image = (in_text) => {
     return data;
 }
 window.responseServer = async (response) => {
-    console.log(response);
     var _uui, _image, _chats, _fileName, _image, _file_, _encrypted, _idChat_, _dataArray;
     if (intents.executions.simulateTyping){
         window.WAPI.simulateTyping(response.idChat, true);

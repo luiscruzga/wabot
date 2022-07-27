@@ -5,7 +5,7 @@ const convert64 = new ConvertBase64();
 
 const subreddits = {
     "en": ['dankmemes', 'wholesomeanimemes', 'wholesomememes', 'AdviceAnimals', 'MemeEconomy', 'memes', 'terriblefacebookmemes', 'teenagers', 'historymemes'],
-    "es": ['LatinoPeopleTwitter', 'chistes', 'Divertido', 'SpanishMeme', 'memexico']
+    "es": ['LatinoPeopleTwitter', 'chistes', 'Divertido', 'memexico']
 }
 
 const evaluateMeme = (_info) => {
