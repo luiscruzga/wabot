@@ -4,10 +4,10 @@ window.evaluateResponse = async function(idChat, idMessage, params, reportVariab
     }else {
         reportVariable.body = '';
         if(reportVariable.type === 'image'){
-            /*WAPI.downloadFileAndDecrypt(reportVariable.clientUrl, reportVariable.type, reportVariable.mediaKey, reportVariable.mimetype, async (data) => {
-                newMessage({ "media": data.result, "data": reportVariable });
-            })*/
-            newMessage({ "media": reportVariable.content, "data": reportVariable });
+            WAPI.downloadFileAndDecryptNew(reportVariable.id)
+            .then((res) => {
+                newMessage({ "media": res.data, "data": reportVariable });
+            });
         }else {
             newMessage({"data": reportVariable});
         }

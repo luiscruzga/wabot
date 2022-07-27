@@ -1114,6 +1114,56 @@ window.WAPI.downloadFileBuffer = function (url, done) {
     xhr.send(null);
 };
 
+window.WAPI.arrayBufferToBase64 = (arrayBuffer) => {
+    let binary = '';
+    const bytes = new Uint8Array(arrayBuffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+};
+
+window.WAPI.downloadFileAndDecryptNew = async function (msgId) {
+    const msg = window.Store.Msg.get(msgId);
+
+    if (msg.mediaData.mediaStage != 'RESOLVED') {
+        // try to resolve media
+        await msg.downloadMedia({
+            downloadEvenIfExpensive: true,
+            rmrReason: 1
+        });
+    }
+
+    if (msg.mediaData.mediaStage.includes('ERROR') || msg.mediaData.mediaStage === 'FETCHING') {
+        // media could not be downloaded
+        return undefined;
+    }
+
+    try {
+        const decryptedMedia = await window.Store.DownloadManager.downloadAndDecrypt({
+            directPath: msg.directPath,
+            encFilehash: msg.encFilehash,
+            filehash: msg.filehash,
+            mediaKey: msg.mediaKey,
+            mediaKeyTimestamp: msg.mediaKeyTimestamp,
+            type: msg.type,
+            signal: (new AbortController).signal
+        });
+
+        const data = window.WAPI.arrayBufferToBase64(decryptedMedia);
+
+        return {
+            data,
+            mimetype: msg.mimetype,
+            filename: msg.filename
+        };
+    } catch (e) {
+        if(e.status && e.status === 404) return undefined;
+        throw e;
+    }
+}
+
 window.WAPI.downloadFileAndDecrypt = function (url, type, mediaKey, mimetype, callbackFunction) {
     window.WAPI.downloadFileBuffer(url, async function(result) {
         let a = await Store.CryptoLib.decryptE2EMedia(type || "image", result, mediaKey, mimetype);
