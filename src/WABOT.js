@@ -2,6 +2,7 @@ const EventEmitter = require('events');
 const Merge = require('merge-anything');
 const fs = require('fs');
 const path = require('path');
+var scrape = require('html-metadata');
 const _WABOT = require('../lib/browser');
 const ConvertBase64 = require('../lib/convertBase64');
 const Stickers = require('../lib/stickers');
@@ -12,6 +13,8 @@ const convert64 = new ConvertBase64();
 const vcard = new Vcards();
 const puppeteerDefault = require('../types/puppeteer.config.json');
 const intentsDefault = require('../types/intents.json');
+
+THUMB_DEFAULT_URL = 'https://icon-library.com/images/url-icon-png/url-icon-png-20.jpg'
 
 const Params = require('./params');
 const getRandomItem = (array) => {
@@ -808,7 +811,43 @@ class WABOT extends EventEmitter {
     sendLink(args){
         let data = types.valid('link', args);
         if (data.isValid){
-            this._wabot.sendMessage(data.data);
+            if (args.thumb) {
+                this._wabot.sendMessage(data.data);
+            } else {
+                const _this = this;
+                scrape(args.link, function(error, metadata){
+                    if(!error){
+                        if(typeof metadata.openGraph != 'undefined' && metadata.openGraph != undefined){
+                            const title = metadata.openGraph.title || "News";
+                            const description = metadata.openGraph.description || "";
+                            const urlNews = metadata.openGraph.url || args.link;
+                            let urlImage;
+                            if(typeof metadata.openGraph.image.url != "undefined" && metadata.openGraph.image.url != undefined && metadata.openGraph.image.url != ""){
+                                urlImage = metadata.openGraph.image.url;
+                            }else{
+                                urlImage = THUMB_DEFAULT_URL;
+                            }
+
+                            const info = data.data;
+                            info.description = description;
+                            info.title = title;
+                            info.link = urlNews;
+                            
+                            convert64.convert(urlImage)
+                            .then(res => {
+                                info.thumb = res;
+                                _this._wabot.sendMessage(info);
+                            })
+                            .catch(err => {
+                                info.thumb = '';
+                                _this._wabot.sendMessage(info);
+                            })
+                        }
+                    } else {
+                        console.error(data.messageInvalid);
+                    }
+                });
+            }
         }else {
             console.error(data.messageInvalid);
         }

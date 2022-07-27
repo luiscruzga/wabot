@@ -62,7 +62,7 @@
     "yt-search": "^2.5.1"
   },
   "devDependencies": {
-    "jsdoc": "^3.6.6",
-    "better-docs": "^2.3.2"
+    "better-docs": "^2.3.2",
+    "jsdoc": "^3.6.6"
   }
 }
