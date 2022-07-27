@@ -43,7 +43,7 @@ module.exports = {
                     })
                 })
                 .catch(err => {
-                    if (error === 'It was not possible to identify a face in the image, try sending a profile image') {
+                    if (err === 'It was not possible to identify a face in the image, try sending a profile image') {
                         this.sendMessage({
                             "idChat": args.idChat,
                             "message": args. messageNoFace

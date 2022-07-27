@@ -252,6 +252,16 @@ class WABOT extends EventEmitter {
              */
             this.emit('ready', session);
         })
+
+        process.on('SIGINT', async () => {
+            console.log('Unexpected closure, we will close the browser for greater security!');
+            await this._wabot.destroy();
+        });
+
+        process.on('SIGQUIT', async () => {
+            console.log('Unexpected closure, we will close the browser for greater security!');
+            this._wabot.destroy();
+        });
     }
 
     mergeOpts (defaultOpts, customOpts) {
