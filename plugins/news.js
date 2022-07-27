@@ -3,11 +3,16 @@ const request = require('request');
 const base64 = require('node-base64-image');
 const feed = require("feed-read");
 const scrape = require('html-metadata');
-const thumbDefault = 'https://st2.depositphotos.com/3837271/6711/i/950/depositphotos_67114347-stock-photo-news-piece-of-paper.jpg';
+const urlThumbDefault = 'https://st2.depositphotos.com/3837271/6711/i/950/depositphotos_67114347-stock-photo-news-piece-of-paper.jpg';
 var timeRefresh = 10;
 var contMaxNotice = 3;
 var contNews = 0;
 var newsArray = [];
+
+var thumbDefault = '';
+base64.encode(urlThumbDefault, {string: true}, (err, data64) => {
+    if(!err) thumbDefault = data64;
+})
 
 const loadNewsCache = (feeds) => {
     newsArray = [];
@@ -41,7 +46,7 @@ const getNews = (search) => {
                         if(typeof metadata.openGraph.image.url != "undefined" && metadata.openGraph.image.url != undefined && metadata.openGraph.image.url != ""){
                             urlImage = metadata.openGraph.image.url;
                         }else{
-                            urlImage = thumbDefault;
+                            urlImage = urlThumbDefault;
                         }
 
                         base64.encode(urlImage, options, (err, data64) => {

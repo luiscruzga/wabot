@@ -573,7 +573,7 @@ class WABOT extends EventEmitter {
     addPlugins (plugins) {
         if (Array.isArray(plugins.plugins)) {
             // Read plugins folder
-            const pathPlugins = path.join(__dirname, plugins.folder);
+            const pathPlugins = path.join(__dirname, plugins.folder || '../plugins/');
             fs.readdir(pathPlugins, (err, files) => {
                 if (err) { 
                     console.error('Error reading plugins directory'); 
@@ -811,7 +811,7 @@ class WABOT extends EventEmitter {
     sendLink(args){
         let data = types.valid('link', args);
         if (data.isValid){
-            if (args.thumb) {
+            if (args.thumb && args.thumb !== '') {
                 this._wabot.sendMessage(data.data);
             } else {
                 const _this = this;
