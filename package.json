@@ -1,6 +1,6 @@
 {
   "name": "wabot",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "description": "Whatsapp Bot Module for automate response and interact whit users",
   "main": "src/WABOT.js",
   "scripts": {
@@ -37,8 +37,8 @@
     "fs": "0.0.1-security",
     "google-it": "^1.6.0",
     "html-metadata": "^1.7.1",
-    "imagemin": "^8.0.1",
-    "imagemin-webp": "^7.0.0",
+    "imagemin": "^7.0.1",
+    "imagemin-webp": "^6.0.0",
     "jsdoc": "^3.6.6",
     "jsdoc-template": "^1.2.0",
     "lodash": "^4.17.20",
