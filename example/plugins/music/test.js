@@ -9,6 +9,7 @@ const wabot = new WABOT({
         commands: [
             {
                 "name":  "getMusic",
+                "description": "Get a song in mp3",
                 "exact": ["@music", "music", "@musica", "musica", "música", "@song", "song"],
                 "params": [
                     {

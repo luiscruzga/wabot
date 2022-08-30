@@ -10,7 +10,12 @@ const wabot = new WABOT({
         showContent: true,
         commands: [
             {
+                "name":  "getHelp",
+                "exact": ["@help", "help", "ayuda", "@ayuda"]
+            },
+            {
                 "name":  "question",
+                "description": "Make a question about you",
                 "contains": [],
                 "exact": ["@question", "question", "about me"],
                 "params": [
@@ -50,6 +55,14 @@ wabot.on('question', (res) => {
 		"message": `Your sex is "${res.params.sex}" and you are "${res.params.age}" years old`
     });
 });
+
+// Send the command list
+wabot.on('getHelp', (res) => {
+    wabot.sendCommands({
+      "idChat": res.data.from,
+      "prefix": 'These are all the commands you can use: '
+    });
+  });
 
 // Default when no assignment is found for the message
 wabot.on('message', (res) => {

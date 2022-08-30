@@ -14,6 +14,7 @@ const wabot = new WABOT({
         commands: [
             {
                 "name":  "getCartoon",
+                "description": "Make a selfie in a cartoon",
                 "exact": ["@cartoon", "cartoon"]
             }
         ]

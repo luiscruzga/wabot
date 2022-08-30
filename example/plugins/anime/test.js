@@ -9,6 +9,7 @@ const wabot = new WABOT({
         commands: [
             {
                 "name":  "getAnime",
+                "description": "Make a selfie in a anime",
                 "exact": ["@anime", "anime"]
             }
         ]

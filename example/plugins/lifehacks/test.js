@@ -16,6 +16,7 @@ const wabot = new WABOT({
         commands: [
             {
                 "name":  "getLifehacks",
+                "description": "Get Lifehacks",
                 "exact": ["@lifehack", "@lifehacks", "lifehacks", "lifehack", "life hacks", "life hacks"]
             }
         ]

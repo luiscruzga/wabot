@@ -9,6 +9,7 @@ const wabot = new WABOT({
         commands: [
             {
                 "name":  "getMeme",
+                "description": "Get a random meme from reddit",
                 "exact": ["@meme", "@memes", "meme", "memes"]
             }
         ]

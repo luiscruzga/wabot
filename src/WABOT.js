@@ -621,6 +621,34 @@ class WABOT extends EventEmitter {
         }
     }
 
+    /**
+     * Send list of commands
+     * @param {object} args - The message info
+     * @param {string} args.idChat - Id Chat
+     * @param {string} args.prefix - Prefix message
+     */
+     sendCommands(args) {
+        if (this.intentConfig.commands && this.intentConfig.commands.length > 0) {
+            let helpText = `${args.prefix || ''} \n `;
+            this.intentConfig.commands.forEach(command => {
+                if (command.description && command.description !== '') {
+                    if (command.exact && command.exact.length > 0) {
+                        helpText += `- *${command.exact[0]}* - ${command.description} \n `;
+                    } else {
+                        helpText += `- ${command.description} \n `;
+                    }
+                }
+            });
+
+            if (helpText !== '') {
+                this.sendMessage({
+                    "idChat": args.idChat, 
+                    "message": helpText
+                });
+            }
+        }
+    }
+
     addCommand (command) {
         this.intentConfig.commands.push(command);
     }

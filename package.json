@@ -1,6 +1,6 @@
 {
   "name": "wabot",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Whatsapp Bot Module for automate response and interact whit users",
   "main": "src/WABOT.js",
   "scripts": {

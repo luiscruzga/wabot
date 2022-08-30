@@ -9,6 +9,7 @@ const wabot = new WABOT({
         commands: [
             {
                 "name":  "getWiki",
+                "description": "Get info from wikipedia",
                 "exact": ["@wiki", "wiki", "wikipedia", "@wikipedia"],
                 "params": [
                     {

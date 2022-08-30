@@ -20,6 +20,7 @@ const wabot = new WABOT({
         commands: [
             {
                 "name":  "getNews",
+                "description": "Get a news",
                 "exact": ["@news", "news", "@noticias", "noticias", "@noticia", "noticia"],
                 "params": [
                     {

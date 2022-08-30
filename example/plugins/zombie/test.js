@@ -9,6 +9,7 @@ const wabot = new WABOT({
         commands: [
             {
                 "name":  "makeZombie",
+                "description": "Make a selfie in a zombie",
                 "exact": ["@makezombie", "@zombie", "zombie", "makezombie"]
             }
         ]

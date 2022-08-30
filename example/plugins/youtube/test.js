@@ -9,6 +9,7 @@ const wabot = new WABOT({
         commands: [
             {
                 "name":  "getYoutube",
+                "description": "Get a youtube video",
                 "exact": ["@youtube", "youtube"],
                 "params": [
                     {

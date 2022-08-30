@@ -9,6 +9,7 @@ const wabot = new WABOT({
         commands: [
             {
                 "name":  "getCoronavirus",
+                "description": "Get coronavirus information",
                 "exact": ["@coronavirus", "coronavirus", "covid", "covid", "@virus", "virus"],
                 "params": [
                     {

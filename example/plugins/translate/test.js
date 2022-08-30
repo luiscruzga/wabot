@@ -9,6 +9,7 @@ const wabot = new WABOT({
         commands: [
             {
                 "name":  "getTranslation",
+                "description": "Transale a text",
                 "exact": ["@translate", "translate", "@traduccion", "traduccion", "traducción"],
                 "params": [
                     {

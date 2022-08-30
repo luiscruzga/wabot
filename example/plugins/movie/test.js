@@ -9,6 +9,7 @@ const wabot = new WABOT({
         commands: [
             {
                 "name":  "getMovie",
+                "description": "Get a movie",
                 "exact": ["@movie", "@pelicula", "movie", "pelicula", "peliculas", "movies"],
                 "params": [
                     {
