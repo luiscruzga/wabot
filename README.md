@@ -66,6 +66,7 @@ Below is a list of the plugins that come by default incorporated with the module
 
 | Plugin| Description |
 | ------------- | ------------- |
+| AI-Image | Plugin that allows you to create a image from an text |
 | Anime | Plugin to transform your selfie into an anime portrait using minivision photo2cartoon |
 | Cartoon | Plugin to transform your selfie into an cartoon portrait using |
 | Coronavirus | Plugin to obtain information on the coronavirus by countries, cases, deaths, etc |
