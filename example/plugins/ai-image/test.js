@@ -36,7 +36,7 @@ wabot.on('makeImage', (res) => {
     wabot.aiimage({
       "idChat": res.data.from,
       "apiKey": API_KEY,
-      "seach": res.params.search
+      "search": res.params.search
     });
 });
 

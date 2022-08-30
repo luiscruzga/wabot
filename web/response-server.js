@@ -71,9 +71,9 @@ window.responseServer = async (response) => {
             _uui = randomUUI();
             _fileName = "image"+_uui+".jpeg";
             if (response.replyMessage && response.isAlbum){
-                WAPI.sendImage("data:image/jpeg;base64,"+response.file, response.idChat, _fileName, response.caption, response.idMessage);
+                WAPI.sendImage("data:image/jpeg;base64,"+response.file.replace(/^data:image\/jpeg;base64,/, ""), response.idChat, _fileName, response.caption, response.idMessage);
             }else {
-                WAPI.sendImage("data:image/jpeg;base64,"+response.file, response.idChat, _fileName, response.caption, '');
+                WAPI.sendImage("data:image/jpeg;base64,"+response.file.replace(/^data:image\/jpeg;base64,/, ""), response.idChat, _fileName, response.caption, '');
             }
             break;
         case 'document': 
