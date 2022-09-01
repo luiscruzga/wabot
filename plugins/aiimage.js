@@ -6,6 +6,7 @@ const defaultConfig = {
     idChat: '',
     apiKey: '',
     search: '',
+    usePython3: true,
     language: 'en',
     messageError: '*Ooops, an error occurred while trying to make image, try again later*',
 }
@@ -36,6 +37,7 @@ module.exports = {
             .then(translation => {
                 SD.makeImage({
                     search: translation.text,
+                    isPython3: usePython3
                 })
                 .then(image => {
                     _this.sendImage({
