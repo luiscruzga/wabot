@@ -38,7 +38,7 @@ module.exports = {
             .then(translation => {
                 SD.makeImage({
                     search: translation.text,
-                    isPython3: usePython3
+                    isPython3: args.usePython3
                 })
                 .then(image => {
                     _this.sendImage({
