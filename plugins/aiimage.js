@@ -8,6 +8,7 @@ const defaultConfig = {
     search: '',
     usePython3: true,
     language: 'en',
+    debug: false,
     messageError: '*Ooops, an error occurred while trying to make image, try again later*',
 }
 /**
@@ -47,6 +48,7 @@ module.exports = {
                     })
                 })
                 .catch(err => {
+                    if (args.debug) console.error(err);
                     _this.sendMessage({
                         "idChat": args.idChat, 
                         "message": args.messageError
@@ -54,6 +56,7 @@ module.exports = {
                 });
             })
 			.catch(err => {
+                if (args.debug) console.error(err);
 				_this.sendMessage({
                     "idChat": args.idChat, 
                     "message": args.messageError
