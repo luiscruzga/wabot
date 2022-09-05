@@ -1775,28 +1775,122 @@ window.WAPI.setMyStatus = function (newStatus) {
     return Store.MyStatus.setMyStatus(newStatus)
 }
 
-window.WAPI.sendVideoAsGif = async function (imgBase64, chatid, filename, caption, quotedMsg) {
-    let extras = {};
-    if(quotedMsg){
-        if (typeof quotedMsg !== "object") quotedMsg = Store.Msg.get(quotedMsg);
-        extras = {
-            quotedMsg,
-            quotedParticipant: quotedMsg.author || quotedMsg.from,
-            quotedStanzaID:quotedMsg.id.id
-        };
+
+window.WAPI.mediaInfoToFile = ({ data, mimetype, filename }) => {
+	var arr = data.split(',');
+    var mime = arr[0].match(/:(.*?);/)[1];
+    const binaryData = window.atob(arr[1]);
+
+    const buffer = new ArrayBuffer(binaryData.length);
+    const view = new Uint8Array(buffer);
+    for (let i = 0; i < binaryData.length; i++) {
+        view[i] = binaryData.charCodeAt(i);
     }
-    // create new chat
-    return await Store.Chat.find(chatid).then(async (chat) => {
-        var mediaBlob = window.WAPI.base64ImageToFile(imgBase64, filename);
-        var mc = new Store.MediaCollection(chat);
-        return await window.WAPI.procFiles(chat,mediaBlob).then(async mc => {
-            var media = mc._models[0];
-            media.mediaPrep._mediaData.isGif = true;
-            media.mediaPrep._mediaData.gifAttribution = 1;
-            await media.mediaPrep.sendToChat(chat, { caption,...extras });
-            return chat.lastReceivedKey._serialized;
-        });
+
+    const blob = new Blob([buffer], { type: mimetype });
+    return new File([blob], filename, {
+        type: mimetype,
+        lastModified: Date.now()
     });
+};
+
+window.WAPI.processMediaData = async (mediaInfo, { forceVoice, forceDocument, forceGif }) => {
+    const file = window.WAPI.mediaInfoToFile(mediaInfo);
+    const mData = await window.Store.OpaqueData.createFromData(file, file.type);
+    const mediaPrep = window.Store.MediaPrep.prepRawMedia(mData, { asDocument: forceDocument });
+    const mediaData = await mediaPrep.waitForPrep();
+    const mediaObject = window.Store.MediaObject.getOrCreateMediaObject(mediaData.filehash);
+
+    const mediaType = window.Store.MediaTypes.msgToMediaType({
+        type: mediaData.type,
+        isGif: mediaData.isGif
+    });
+
+    if (forceVoice && mediaData.type === 'audio') {
+        mediaData.type = 'ptt';
+    }
+	
+    if (forceGif && mediaData.type === 'video') {
+        mediaData.isGif = true;
+    }
+
+    if (forceDocument) {
+        mediaData.type = 'document';
+    }
+
+    if (!(mediaData.mediaBlob instanceof window.Store.OpaqueData)) {
+        mediaData.mediaBlob = await window.Store.OpaqueData.createFromData(mediaData.mediaBlob, mediaData.mediaBlob.type);
+    }
+
+    mediaData.renderableUrl = mediaData.mediaBlob.url();
+    mediaObject.consolidate(mediaData.toJSON());
+    mediaData.mediaBlob.autorelease();
+
+    const uploadedMedia = await window.Store.MediaUpload.uploadMedia({
+        mimetype: mediaData.mimetype,
+        mediaObject,
+        mediaType
+    });
+
+    const mediaEntry = uploadedMedia.mediaEntry;
+    if (!mediaEntry) {
+        throw new Error('upload failed: media entry was not created');
+    }
+
+    mediaData.set({
+        clientUrl: mediaEntry.mmsUrl,
+        deprecatedMms3Url: mediaEntry.deprecatedMms3Url,
+        directPath: mediaEntry.directPath,
+        mediaKey: mediaEntry.mediaKey,
+        mediaKeyTimestamp: mediaEntry.mediaKeyTimestamp,
+        filehash: mediaObject.filehash,
+        encFilehash: mediaEntry.encFilehash,
+        uploadhash: mediaEntry.uploadHash,
+        size: mediaObject.size,
+        streamingSidecar: mediaEntry.sidecar,
+        firstFrameSidecar: mediaEntry.firstFrameSidecar
+    });
+
+    return mediaData;
+};
+
+window.WAPI.sendVideoAsGif = async function (imgBase64, chatid, filename, caption, quotedMsg) {
+	return Store.Chat.find(chatid).then(async (chat) => {
+		const meUser = window.Store.User.getMaybeMeUser();
+		const isMD = window.Store.MDBackend;
+		const newMsgId = new window.Store.MsgKey({
+			from: meUser,
+			to: chat.id,
+			id: window.Store.MsgKey.newId(),
+			participant: isMD && chat.id.isGroup() ? meUser : undefined,
+			selfDir: 'out',
+		});
+		const gif = await window.WAPI.processMediaData({
+			data: imgBase64,
+			mimetype: 'video/mp4',
+			filename: filename
+		},
+		{
+			forceVoice: false,
+			forceDocument: false,
+			forceGif: true
+		});
+
+		const message = {
+			id: newMsgId,
+			ack: 0,
+			body: gif.preview,
+			from: meUser,
+			to: chat.id,
+			local: true,
+			self: 'out',
+			t: parseInt(new Date().getTime() / 1000),
+			isNewMsg: true,
+			type: 'chat',
+			...gif
+		};
+		return await window.Store.SendMessage.addAndSendMsgToChat(chat, message);
+	});
 }
 
 window.WAPI.refreshBusinessProfileProducts = async function (){
