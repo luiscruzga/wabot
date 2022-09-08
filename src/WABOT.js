@@ -143,7 +143,11 @@ class WABOT extends EventEmitter {
         });
 
         this._wabot.on('message', (arg) => {
-            this.getNewMessages(arg);
+            try {
+                this.getNewMessages(arg);
+            } catch (err) {
+                console.error('Error on new message', err);
+            }
         });
 
         this._wabot.on('onStateChanged', (arg) => {
