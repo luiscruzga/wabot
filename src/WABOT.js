@@ -626,6 +626,7 @@ class WABOT extends EventEmitter {
      * @param {object} args - The message info
      * @param {string} args.idChat - Id Chat
      * @param {string} args.prefix - Prefix message
+     * @param {string} args.postfix - Postfix message
      */
      sendCommands(args) {
         if (this.intentConfig.commands && this.intentConfig.commands.length > 0) {
@@ -639,6 +640,8 @@ class WABOT extends EventEmitter {
                     }
                 }
             });
+
+            helpText += `${args.postfix || ''}`;
 
             if (helpText !== '') {
                 this.sendMessage({
