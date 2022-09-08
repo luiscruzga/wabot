@@ -347,6 +347,9 @@ class WABOT extends EventEmitter {
                     }else {
                         _message = arg.data.caption;
                     }
+
+                    if (_message === undefined) _message = '';
+
                     exactMatch = this.intentConfig.commands.find(obj => obj.exact.find(ex => ex.toLowerCase() == _message.toLowerCase()));
                     if (exactMatch !== undefined) {
                         response.params = Params.getParams(exactMatch, '');
