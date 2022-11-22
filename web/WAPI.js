@@ -21,12 +21,14 @@
         window.Store.Conn = window.mR.findModule('Conn')[0].Conn;
         window.Store.BlockContact = window.mR.findModule('blockContact')[0];
         window.Store.Call = window.mR.findModule('CallCollection')[0].CallCollection;
+        window.Store.CreateGroup = window.mR.findModule('createGroup')[0].createGroup;
+        window.Store.QueryLinkPreview = window.mR.findModule('queryLinkPreview').length > 0 ? window.mR.findModule('queryLinkPreview')[0].queryLinkPreview : null;
         window.Store.Cmd = window.mR.findModule('Cmd')[0].Cmd;
         window.Store.CryptoLib = window.mR.findModule('decryptE2EMedia')[0];
         window.Store.DownloadManager = window.mR.findModule('downloadManager')[0].downloadManager;
-        window.Store.MDBackend = window.mR.findModule('isMDBackend')[0].isMDBackend();
+        window.Store.MDBackend = window.mR.findModule('isMDBackend').length > 0 ?  window.mR.findModule('isMDBackend')[0].isMDBackend() : true;
         window.Store.Features = window.mR.findModule('FEATURE_CHANGE_EVENT')[0].LegacyPhoneFeatures;
-        window.Store.GroupMetadata = window.mR.findModule((module) => module.default && module.default.handlePendingInvite)[0].default;
+        window.Store.GroupMetadata = window.mR.findModule('GroupMetadata')[0].default.GroupMetadata;
         window.Store.Invite = window.mR.findModule('sendJoinGroupViaInvite')[0];
         window.Store.InviteInfo = window.mR.findModule('sendQueryGroupInvite')[0];
         window.Store.Label = window.mR.findModule('LabelCollection')[0].LabelCollection;
@@ -38,7 +40,8 @@
         window.Store.MsgKey = window.mR.findModule((module) => module.default && module.default.fromString)[0].default;
         window.Store.MessageInfo = window.mR.findModule('sendQueryMsgInfo')[0];
         window.Store.OpaqueData = window.mR.findModule(module => module.default && module.default.createFromData)[0].default;
-        window.Store.QueryExist = window.mR.findModule('queryExists')[0].queryExists;
+        window.Store.QueryExists = window.mR.findModule('queryExists')[0].queryExists;
+        window.Store.QueryExist = window.mR.findModule('queryExist')[0].queryExist;
         window.Store.QueryProduct = window.mR.findModule('queryProduct')[0];
         window.Store.QueryOrder = window.mR.findModule('queryOrder')[0];
         window.Store.SendClear = window.mR.findModule('sendClear')[0];
@@ -52,7 +55,7 @@
         window.Store.UserConstructor = window.mR.findModule((module) => (module.default && module.default.prototype && module.default.prototype.isServer && module.default.prototype.isUser) ? module.default : null)[0].default;
         window.Store.Validators = window.mR.findModule('findLinks')[0];
         window.Store.VCard = window.mR.findModule('vcardFromContactModel')[0];
-        window.Store.Wap = window.mR.findModule('queryLinkPreview')[0].default;
+        window.Store.Wap = window.mR.findModule('queryLinkPreview').length > 0 ? window.mR.findModule('queryLinkPreview')[0].default : null;
         window.Store.WidFactory = window.mR.findModule('createWid')[0];
         window.Store.ProfilePic = window.mR.findModule('profilePicResync')[0];
         window.Store.PresenceUtils = window.mR.findModule('sendPresenceAvailable')[0];
@@ -64,6 +67,7 @@
         window.Store.StatusUtils = window.mR.findModule('setMyStatus')[0];
         window.Store.ConversationMsgs = window.mR.findModule('loadEarlierMsgs')[0];
         window.Store.sendReactionToMsg = window.mR.findModule('sendReactionToMsg')[0].sendReactionToMsg;
+        window.Store.Participants = window.mR.findModule('addParticipants')[0];
         window.Store.StickerTools = {
             ...window.mR.findModule('toWebpSticker')[0],
             ...window.mR.findModule('addWebpMetadata')[0]
@@ -78,7 +82,7 @@
         //Store.Sticker = Object.values(window.mR.modules).find(module => module !== undefined && module.default && module.default.Sticker).default.Sticker;
         Store.MediaCollection = Object.values(window.mR.modules).find(module => (module !== undefined && module.default && module.default.prototype && (module.default.prototype.processFiles !== undefined||module.default.prototype.processAttachments !== undefined))).default;
         if(window.Store.MediaCollection) window.Store.MediaCollection.prototype.processFiles = window.Store.MediaCollection.prototype.processFiles || window.Store.MediaCollection.prototype.processAttachments;
-        Store.WapQuery = Object.values(window.mR.modules).find(module => module && module.default && module.default.queryExist).default;
+        //Store.WapQuery = Object.values(window.mR.modules).find(module => module && module.default && module.default.queryExist).default;
         if (!window.Store.Chat._find) {
             window.Store.Chat._find = e => {
                 const target = window.Store.Chat.get(e);
@@ -217,7 +221,7 @@ window.WAPI.createGroup = async function (name, contactsId) {
     if (!Array.isArray(contactsId)) {
         contactsId = [contactsId];
     }
-    return await window.Store.WapQuery.createGroup(name, contactsId);
+    return await window.Store.CreateGroup(name, contactsId);
 };
 
 /**
@@ -426,7 +430,7 @@ window.WAPI.sendLinkWithAutoPreview = async function (chatId, url, text, quotedM
         return false;
     }
     const link = window.Store.Validators.findLink(url);
-    const linkPreview = await Store.WapQuery.queryLinkPreview(link.url);
+    const linkPreview = await Store.QueryLinkPreview(link.url);
     return (await chatSend.sendMessage(text.includes(url) ? text : `${url}\n${text}`, {linkPreview: linkPreview, quotedMsg: quotedMsg}))=='success'
 }
 
@@ -1034,7 +1038,7 @@ window.WAPI.getCommonGroups = async function (id) {
 };
 
 window.WAPI.getProfilePicFromServer = function (id) {
-    return Store.WapQuery.profilePicFind(id).then(x => x.eurl);
+    return Store.ProfilePic.profilePicFind(id).then(x => x.eurl);
 }
 
 window.WAPI.getProfilePicSmallFromId = async function (id) {
@@ -1315,7 +1319,7 @@ window.WAPI.getVCards = function(id) {
 
 window.WAPI.checkNumberStatus = async function (id) {
     try {
-        const result = await window.Store.WapQuery.queryExist(id);
+        const result = await window.Store.QueryExist(id);
         if (result.jid === undefined) throw 404;
         const data = window.WAPI._serializeNumberStatusObj(result);
         if (data.status == 200) data.numberExists = true
@@ -1763,7 +1767,7 @@ window.WAPI.setMyName = async function (newName) {
  * @returns boolean true if it was set, false if it didn't work. It usually doesn't work if the image file is too big.
  */
 window.WAPI.setGroupIcon = async function(groupId, imgData) {
-    const {status} = await Store.WapQuery.sendSetPicture(groupId,imgData,imgData);
+    const {status} = await Store.ProfilePic.sendSetPicture(groupId,imgData,imgData);
     return status==200;
 }
 
@@ -2350,7 +2354,7 @@ window.WAPI.promoteParticipant = async function (idGroup, idParticipant) {
  * @param {*} idParticipant '000000000000@c.us'
  */
 window.WAPI.demoteParticipant = async function (idGroup, idParticipant) {
-    await window.Store.WapQuery.demoteParticipants(idGroup, [idParticipant])
+    await window.Store.Participants.demoteParticipants(idGroup, [idParticipant])
     const chat = Store.Chat.get(idGroup);
     const demote = chat.groupMetadata.participants.get(idParticipant);
     await window.Store.Participants.demoteParticipants(chat, [demote])

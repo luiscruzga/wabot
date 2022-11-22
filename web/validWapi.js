@@ -1,5 +1,5 @@
 var validWapi = function (){
-    if(typeof WAPI.isLoggedIn() === 'undefined'){
+    if (typeof WAPI === 'undefined' || typeof WAPI.isLoggedIn() === 'undefined'){
         injectWapi();
     }else {
         clearInterval(intervalWapi);
