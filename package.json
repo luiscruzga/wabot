@@ -1,6 +1,6 @@
 {
   "name": "wabot",
-  "version": "1.4.2",
+  "version": "1.4.4",
   "description": "Whatsapp Bot Module for automate response and interact whit users",
   "main": "src/WABOT.js",
   "scripts": {
@@ -42,7 +42,7 @@
     "jsdoc": "^3.6.6",
     "jsdoc-template": "^1.2.0",
     "lodash": "^4.17.20",
-    "makemeazombie": "^1.0.1",
+    "makemeazombie": "^1.0.2",
     "merge-anything": "^3.0.6",
     "moment": "^2.29.1",
     "node-base64-image": "^1.0.7",
@@ -54,7 +54,7 @@
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
     "selfietoanime": "^1.0.0",
-    "sharp": "^0.26.3",
+    "sharp": "^0.31.2",
     "stable-difussion-js": "^1.0.3",
     "toonify": "^1.0.0",
     "util": "^0.12.3",
