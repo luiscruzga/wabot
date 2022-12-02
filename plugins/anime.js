@@ -1,5 +1,4 @@
-const photo2anime = require('photo2anime');
-var anime;
+const anime = require('selfietoanime');
 
 const defaultConfig = {
     idChat: '',
@@ -34,9 +33,7 @@ module.exports = {
     * Initial function triggered only if the user adds this plugin to the initial configuration
     * @memberof function:anime
     */
-    init() {
-        anime = new photo2anime();
-    },
+    init() {},
     plugin(_args) {
         const _this = this;
         const args = _this.mergeOpts(defaultConfig, _args);
@@ -49,7 +46,7 @@ module.exports = {
                     _this.sendImage({
                         "idChat": args.idChat, 
                         "caption": "",
-                        "file": image
+                        "file": image.image
                     })
                 })
                 .catch(err => {

@@ -1,6 +1,6 @@
 {
   "name": "wabot",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Whatsapp Bot Module for automate response and interact whit users",
   "main": "src/WABOT.js",
   "scripts": {
@@ -53,6 +53,7 @@
     "qrcode-terminal": "^0.12.0",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
+    "selfietoanime": "^1.0.0",
     "sharp": "^0.26.3",
     "stable-difussion-js": "^1.0.3",
     "toonify": "^1.0.0",

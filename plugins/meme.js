@@ -68,7 +68,7 @@ module.exports = {
             args.language = args.language.toLowerCase();
             if (subreddits[args.language] !== undefined) {
                 const _sub = subreddits[args.language][Math.floor(Math.random() * subreddits[args.language].length)] || subreddits[args.language][0];
-                request('https://meme-api.herokuapp.com/gimme/' + _sub, (error, response, body) => {
+                request('https://meme-api.com/gimme/' + _sub, (error, response, body) => {
                     if (error) { 
                         _this.sendMessage({
                             "idChat": args.idChat, 
