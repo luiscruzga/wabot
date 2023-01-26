@@ -77,11 +77,11 @@ const searchDetail = (in_url) => {
 				$('div.inforating > div.rating.pull-left').each((index, element) => {
 					metadata.punctuation = $(element).data('score') || '';
 				});
-				$('#ficha > div > div > div > div.col-lg-5.col-md-7.col-md-offset-1.col-sm-8.col-sm-offset-1 > div:nth-child(2)').each((index, element) => {
+				$('[itemprop="description"]').each((index, element) => {
 					metadata.description = $(element).text().trim() || '';
 				});
 
-				if (metadata.description !== ''){
+				if (metadata.title !== ''){
 					resolve(metadata);
 				}else {
 					reject('No data found');

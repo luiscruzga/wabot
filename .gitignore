@@ -2,3 +2,4 @@ node_modules/
 ChromeSession/
 debug.log
 .vscode/*
+example/prueba.js
