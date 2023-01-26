@@ -9,11 +9,11 @@ const googleIt = require('google-it');
 const urlWiki = 'https://{{language}}.wikipedia.org/wiki/';
 
 function escapeRegExp(string){
-    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function replaceAll(str, term, replacement) {
-  	return str.replace(new RegExp(escapeRegExp(term), 'g'), replacement);
+  return str.replace(new RegExp(escapeRegExp(term), 'g'), replacement);
 }
 
 var searchWikipedia = function(in_url, in_language){
@@ -26,11 +26,11 @@ var searchWikipedia = function(in_url, in_language){
 			'IMAGE': ''
 		};
 		
-        xray(in_url, 'body@html')(function(err, body){
-            if (!err){
-                var $ = cheerio.load(body);
-                var results = [];
-                var definicion = '';
+		xray(in_url, 'body@html')(function(err, body){
+			if (!err){
+				var $ = cheerio.load(body);
+				var results = [];
+				var definicion = '';
 
 				const summaries = [];
 				let display = true;
@@ -48,11 +48,11 @@ var searchWikipedia = function(in_url, in_language){
 							display = false;
 						}
 					}
-				})
+				});
 				metadata.DEFINITION = summaries.join('\n')
-            }
-            resolve(metadata);
-        })
+			}
+			resolve(metadata);
+		})
 	})
 }
 
@@ -102,35 +102,35 @@ const defaultConfig = {
  */
 module.exports = {
 	/**
-    * Id - Name of the plugin to use
-    * @property {string}  id - Name of the plugin to use
-    */
-    id: 'wiki',
-    plugin(_args) {
-        const args = this.mergeOpts(defaultConfig, _args);
-        if (args.idChat !== '' && args.search !== '') {
-            args.language = args.language.toLowerCase();
-            searchGoogle(args.search.trim(), args.language)
+	* Id - Name of the plugin to use
+	* @property {string}  id - Name of the plugin to use
+	*/
+	id: 'wiki',
+	plugin(_args) {
+		const args = this.mergeOpts(defaultConfig, _args);
+		if (args.idChat !== '' && args.search !== '') {
+			args.language = args.language.toLowerCase();
+			searchGoogle(args.search.trim(), args.language)
 			.then(data => {
-                let msg = `*${ data.TITLE }* \n\n ${ data.DEFINITION }`
-                this.sendMessage({
-                    "idChat": args.idChat,
-                    "message": msg
-                });
+				let msg = `*${ data.TITLE }* \n\n ${ data.DEFINITION }`
+				this.sendMessage({
+					"idChat": args.idChat,
+					"message": msg
+				});
 			})
 			.catch(err => {
 				if (err === 'Definition not found'){
-                    this.sendMessage({
-                        "idChat": args.idChat, 
-                        "message": args.messageNoDataFound
-                    });
+					this.sendMessage({
+						"idChat": args.idChat, 
+						"message": args.messageNoDataFound
+					});
 				}else {
 					this.sendMessage({
-                        "idChat": args.idChat, 
-                        "message": args.messageError
-                    });
+						"idChat": args.idChat, 
+						"message": args.messageError
+					});
 				}
 			});
-        }
-    }
+		}
+	}
 };
