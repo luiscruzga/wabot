@@ -1,5 +1,6 @@
 // Modules to install separately
-const stableDiffusion = require('stable-difussion-js');
+const LexicaArt  = require('lexicaart');
+const ConvertBase64 = require('../lib/convertBase64');
 const translate = require('@vitalets/google-translate-api');
 
 const defaultConfig = {
@@ -30,22 +31,22 @@ module.exports = {
     plugin(_args) {
         const _this = this;
         const args = this.mergeOpts(defaultConfig, _args);
-        if (args.idChat !== '' && args.apiKey !== '' && args.search !== '') {
+        if (args.idChat !== '' && args.search !== '') {
             args.language = args.language.toLowerCase();
-            const SD = new stableDiffusion(args.apiKey);
+            const lexicaart = new LexicaArt();
 
             translate(args.search.toLowerCase(), { 'to': args.language })
             .then(translation => {
-                SD.makeImage({
-                    search: translation.text,
-                    isPython3: args.usePython3
-                })
-                .then(image => {
+                lexicaart.search(translation.text)
+                .then(async (images) => {
+                    let image = images[Math.floor(Math.random()*images.length)];
+                    const convert64 = new ConvertBase64();
+                    const image64 = await convert64.convert(image.images[Math.floor(Math.random()*image.images.length)].url)
                     _this.sendImage({
                         "idChat": args.idChat, 
-                        "caption": args.search,
-                        "file": image
-                    })
+                        "caption": image.prompt,
+                        "file": image64
+                    });
                 })
                 .catch(err => {
                     if (args.debug) console.error(err);
