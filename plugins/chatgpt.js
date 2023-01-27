@@ -1,5 +1,5 @@
 // Modules to install separately
-const ChatGPT = require('./utils/chatgpt-io');
+const ChatGPT = require('./utils/chatgpt-io-new');
 let sessionToken = '';
 function talkChatgpt(prompt){
   return new Promise(async (resolve, reject) => {
